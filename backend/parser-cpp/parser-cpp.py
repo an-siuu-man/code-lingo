@@ -329,6 +329,52 @@ class Parser_CPP:
 
         return backtrack_i, startLine, step
 
+    def _parse_VAR_DECLARE(self, argv: list):   # IN PROGRESS!
+        LOOP_COND, i, line, step, highlight, name, data_type = argv
+        
+        if self.code[i] == "=":
+            i += len("=")
+            while self.code[i] in next_chars["line_wspc"] and LOOP_COND(i):
+                i += 1
+            value_start = i
+            while self.code[i] != ";" and LOOP_COND(i):
+                i += 1
+            value_end = i
+            value = self.code[value_start:value_end]
+        else:   # self.code[i] == ";"
+            value = "__UNINITIALIZED__"   # Uninitialized variable case
+        
+        reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name
+
+        self.scope_stack[-1][2][reference] =  [data_type, name, value]
+        if value != "__UNINITIALIZED__":
+            # Temporary fix, implement scalable solution
+            if value == "true":
+                value = "True"
+            elif value == "false":
+                value = "False"
+            
+            exec(f"{reference} = {value}", globals())
+            # print(eval(reference))
+
+        executionSteps = self.json_dict["executionSteps"] 
+        executionSteps.append(
+            {
+                "step"      : step,
+                "highlight" : highlight,
+                "operation" : "VAR_DECLARE",
+                "reference" : reference,
+                "type"      : data_type,
+                "name"      : name,
+                "value"     : value
+            }
+        )
+        self.json_dict["executionSteps"] = executionSteps
+        
+        step += 1
+
+        return i, line, step
+
 if __name__ == "__main__":
     code_file = open("ideal_parser_test.cpp", 'r')
 
