@@ -8,7 +8,7 @@ return (
         className="h-[25rem] w-full bg-rgb(29, 31, 33) flex flex-col items-center justify-center overflow-hidden rounded-md">
         <h1
             className="md:text-7xl text-3xl lg:text-8xl text-center text-white relative z-20">
-            Code<span className="text-red-500">Lingo</span>{'</>'}
+            Code<span className="text-[#FF6B6B]">{'Lingo</>'}</span>
         </h1>
         <h2 className="text-2xl text-center text-white relative z-20 m-3 fade-in-left">
             An Interactive Learning Platform for Coding
@@ -29,9 +29,9 @@ return (
                 background="transparent"
                 minSize={0.4}
                 maxSize={1}
-                particleDensity={1200}
-                className="w-full h-full"
-                particleColor="#ff0000" />
+                particleDensity={600}
+                className="w-full z-[-5]"
+                particleColor="#FF6B6B" />
 
             {/* Radial Gradient to prevent sharp edges */}
             <div
