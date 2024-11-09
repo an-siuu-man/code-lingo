@@ -1,5 +1,5 @@
-#include <iostream>
-#include <string>
+
+
 
 void new_funct(int, float);
 
@@ -14,24 +14,24 @@ void displayMessage(std::string name, int age= 0)
 }
 
 int main() {
-    // Variables with different data types
+    
     std::string name = "Alice";
     int age = 25;
-    double height = 5.8;  // height in feet
+    double height = 5.8;  
     bool isStudent = true;
 
-    // Call the function
+    
     displayMessage(name, age);
 
     new_funct(1, 2);
 
-    // For loop to count up to 5
+    
     for (int i = 1; i <= 5; ++i) {
         std::cout << "Counting up: " << i << std::endl;
     }
 
 
-    // While loop to countdown from 3
+    
     int countdown = 3;
     while (countdown > 0) {
         std::cout << "Countdown: " << countdown << std::endl;
@@ -39,7 +39,7 @@ int main() {
         isStudent =  false;
     }
     
-    // If-else condition based on age
+    
     if  (randomVar < age) 
     
     {
@@ -51,7 +51,7 @@ int main() {
     
     randomVar -= 6;
 
-    // Return statement in main
+    
     return 0;
 }
 

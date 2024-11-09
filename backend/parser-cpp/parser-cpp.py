@@ -192,7 +192,6 @@ class Parser_CPP:
             
             i += 1
             
-            print(f"self.code[i] = {self.code[i]}; line = {line}")
             self._update_scope_stack(line)
         
         return i, line, step
@@ -755,7 +754,9 @@ class Parser_CPP:
                 net_bracket_cnt -= 1
         endLine = line
 
-        eval_stmt_list = statements.split()
+        eval_stmt_list = statements.split(";")
+        
+        print(f"eval_stmt_list = {eval_stmt_list}")
 
         for scope in self.scope_stack[::-1]:
             for ref in scope[2].keys():
