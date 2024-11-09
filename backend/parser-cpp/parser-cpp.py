@@ -375,6 +375,59 @@ class Parser_CPP:
 
         return i, line, step
 
+    def _parse_VAR_UPDATE(self, argv: list):  # DONE!
+            LOOP_COND, i, line, step, highlight, reference, stmt_start = argv
+
+            while self.code[i] != ";" and LOOP_COND(i):
+                i += 1
+            stmt_end = i
+            
+            update_stmt = self.code[stmt_start:stmt_end]
+            #update_stmt = update_stmt.replace("=", " = ")
+            update_stmt_list = self.code[stmt_start:stmt_end].split()
+            
+            # print(f"update_stmt_list = {update_stmt_list}")
+            for scope in self.scope_stack[::-1]:
+                for ref in scope[2].keys():
+                    update_stmt_list = [ref if scope[2][ref][1] == x else x for x in update_stmt_list]
+
+                    # Quick fix, find scalable solution
+                    update_stmt_list = ["False" if x == "false" else x for x in update_stmt_list]
+                    update_stmt_list = ["True" if x == "true" else x for x in update_stmt_list]
+                try:
+                    data_type = scope[2][reference][0]
+                    name = scope[2][reference][1]
+                    old_value = scope[2][reference][2]
+
+                    target_scope = scope
+                except:
+                    pass
+            # print(f"update_stmt_list = {update_stmt_list}")
+            # print()
+            ref_update_stmt = " ".join(update_stmt_list)
+
+            exec(ref_update_stmt, globals())
+            new_value = str(eval(reference))
+            target_scope[2][reference][2] = new_value
+
+            executionSteps = self.json_dict["executionSteps"] 
+            executionSteps.append(
+                {
+                    "step"      : step,
+                    "highlight" : highlight,
+                    "operation" : "VAR_UPDATE",
+                    "reference" : reference,
+                    "type"      : data_type,  
+                    "name"      : name,
+                    "statement" : update_stmt,
+                    "old_value" : old_value,
+                    "new_value" : new_value
+                },
+            )
+            self.json_dict["executionSteps"] = executionSteps
+            
+            return i, line
+
 if __name__ == "__main__":
     code_file = open("ideal_parser_test.cpp", 'r')
 
