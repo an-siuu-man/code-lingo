@@ -113,6 +113,59 @@ class Parser_CPP:
 
         return i, line, step
     
+    def _parse_keyword(self, argv: list):   # DONE!
+        LOOP_COND, keyword, i, line, step, keyword_i, keyword_line = argv
+        
+        i += len(keyword) + 1
+        highlight = line
+        
+        argv = [LOOP_COND, i, line, step, highlight, keyword_i, keyword_line]
+        i, line = self.cpp_keywords_dict[keyword](argv)
+
+        step += 1
+
+        return i, line, step
+
+    def _parse_reference(self, argv: list):   # IN PROGRESS!
+        LOOP_COND, ref, var_name, i, line, step, backtrack_i, backtrack_line = argv
+        
+        stmt_start = i
+        BWD_IS_VAR_UPDATE = False
+        for OP_LIST in next_chars["bwd_var_name"]:
+            VAR_COND = self.code[i - len(OP_LIST[0]):i] in OP_LIST
+
+            if VAR_COND == True:
+                stmt_start -= len(OP_LIST[0])
+
+            BWD_IS_VAR_UPDATE = BWD_IS_VAR_UPDATE or VAR_COND
+        
+        i += len(var_name)
+        while self.code[i] in next_chars["line_wspc"] and LOOP_COND(i):
+            i += 1
+        
+        FWD_IS_VAR_UPDATE = False
+        if not BWD_IS_VAR_UPDATE:
+            for OP_LIST in next_chars["fwd_var_name"]:
+                VAR_COND = self.code[i:i + len(OP_LIST[0])] in OP_LIST
+                FWD_IS_VAR_UPDATE = FWD_IS_VAR_UPDATE or VAR_COND
+        
+        IS_VAR_UPDATE = FWD_IS_VAR_UPDATE or BWD_IS_VAR_UPDATE
+
+        if IS_VAR_UPDATE:
+            highlight = line
+            
+            argv = [LOOP_COND, i, line, step, highlight, ref, stmt_start]
+            i, line =  self._parse_VAR_UPDATE(argv)
+            
+            step += 1
+            self._update_scope_stack(line)
+
+            break_for_loop = True
+            return i, line, step, break_for_loop
+        else:
+            break_for_loop = False
+            return backtrack_i, backtrack_line, step, break_for_loop
+
     def _pop_COMMENT(self): # DONE!
         try:
             COMMENT_file = open("./temp/_COMMENT_file.txt", "w+")
