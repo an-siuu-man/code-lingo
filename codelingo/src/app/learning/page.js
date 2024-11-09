@@ -23,7 +23,7 @@ export default function Learning() {
             <Sidebar />
 
             {/* Main content area for the Learning page */}
-            <div style={{ flexGrow: 1, padding: '20px', backgroundColor: '#1e1e1e', color: 'white', minHeight: '100vh' }}>
+            <div style={{ flexGrow: 1, backgroundColor: '#1e1e1e', color: 'white', minHeight: '100vh' }}>
                 <Navbar />
                 <h1>Learning Page</h1>
                 

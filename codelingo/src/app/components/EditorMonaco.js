@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Editor from '@monaco-editor/react';
+import PageButton from './PageButton';
 
 const EditorMonaco = () => {
 
@@ -109,13 +110,16 @@ const EditorMonaco = () => {
   }
 
   return (
-    <Editor
-      height="600px"
-      defaultLanguage="cpp"
-      defaultValue={`#include <iostream>\nint main() {\n  //Print "Hello World" here\n  return 0;\n}`}
-      onMount={handleEditorDidMount} // Attach the onMount event handler
-      onChange={handleEditorChange}
-    />
+    <div>
+      <Editor
+        height="600px"
+        defaultLanguage="cpp"
+        defaultValue={`#include <iostream>\nint main() {\n  //Print "Hello World" here\n  return 0;\n}`}
+        onMount={handleEditorDidMount} // Attach the onMount event handler
+        onChange={handleEditorChange}
+      />
+      <PageButton label="Submit" />
+    </div>
   );
 };
 

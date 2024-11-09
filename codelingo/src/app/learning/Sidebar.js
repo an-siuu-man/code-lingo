@@ -23,16 +23,27 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <nav className='w-[max-content]'>
-      <h1>Topics</h1>
+    <nav className='w-[max-content] sticky top-0'>
+      <h1 className='p-4 text-xl text-center'>Learning Topics</h1>
       <ul>
         {topics.map((topicObj, index) => (
           <li key={index}>
-            <p className='font-[Poppins]'>{topicObj.topic}</p>
-            <ul>
-              {topicObj.subheadings.map((subheading, idx) => (
-                <li key={idx}>{`${idx+1}.${subheading}`}</li>
-              ))}
+            <p className='p-2 font-[600] text-[#ff6b6b] font-[poppins]'>{topicObj.topic}</p>
+            <ul className='topic-name'>
+              <table>
+                <tbody>
+                  {topicObj.subheadings.map((subheading, idx) => (
+                    <tr key={idx} className='cursor-pointer transition hover:text-[#FCA204]'>
+                      <td className='w-[30px]'>
+                        <p className='text-left sub-topic ml-8 mr-2 text-[15px]'>{`${idx + 1}.`}</p>
+                      </td>
+                      <td>
+                        <p className='text-left sub-topic ml-2 text-[15px]'>{subheading}</p>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </ul>
           </li>
         ))}
