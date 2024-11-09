@@ -7,6 +7,13 @@
 IDEAS: Implement pointers, references, arrays
 """
 
+"""
+ISSUES: '\n'-type whitespaces are not contemplated properly in dtype, keyword, var_name statements
+BUGS:   randomVar+= 12 gives issues. randomVar += 12 (notice space) does NOT.
+        int i = 0, j = 5; NOT CONTEMPLATED!!!
+        VARIABLE INITIALIZATION WITH OTHER VARIABLES!!!
+"""
+
 import os
 import json
 
@@ -53,7 +60,6 @@ class Parser_CPP:
         self.json_dict = {"code": self.code, "executionSteps": []}
         self.jsonResponse = ""
 
-        """
         self.cpp_keywords_dict = {
             "if"        : self._parse_if,
             "else"      : self._parse_else,
@@ -62,7 +68,7 @@ class Parser_CPP:
             "default"   : self._parse_default,
             "for"       : self._parse_for,
             "while"     : self._parse_while,
-            "do"        : self._parse_do,
+            "do"        : self._parse_dowhile,
             "break"     : self._parse_break,
             "continue"  : self._parse_continue,
             "return"    : self._parse_return,
@@ -71,21 +77,128 @@ class Parser_CPP:
             "try"       : self._parse_try,
             "catch"     : self._parse_catch
         }
-        """
 
         self.scope_stack = []
         self.scope_stack.append(["__SCOPE__GLOBAL__", len(self.code_lines), {}])
         self.scope_registry = [] 
-    
+
     def _read_src(self, file, byLine = False):  # DONE!
         try:
             file.seek(0)
             return file.read() if not byLine else file.readlines()
         except:
             raise Exception("Error. Could not open src_code file.")
+
+    def _update_scope_stack(self, line):    # DONE!
+        global_scope_endline = self.scope_stack[0][1]
+        curr_scope_endline = self.scope_stack[-1][1]
         
-    def _parse_dtype(self, dtype, i, line, step):   # DONE!
+        if line >= curr_scope_endline:
+            old_scope = self.scope_stack.pop()
+            self.scope_registry.append(old_scope)
+        if line == global_scope_endline and len(self.scope_stack) != 0:
+            old_scope = self.scope_stack.pop()
+            self.scope_registry.append(old_scope)
+        
+        return
+
+    def _parse_code(self):  # IN PROGRESS!
+        i = 0
+        line = 1
+        step = 1
+        
         LOOP_COND = lambda i: i < len(self.code)
+        
+        while LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            
+            for dtype in cpp_data_types:
+                if self.code[i:i+len(dtype)] == dtype and self.code[i+len(dtype)] in next_chars["line_wspc"]:
+                    argv = [LOOP_COND, dtype, i, line, step]
+                    i, line, step = self._parse_dtype(argv)
+                    self._update_scope_stack(line)
+                    break
+            
+            for keyword in self.cpp_keywords_dict:
+                keyword_i = i
+                keyword_line = line
+                if self.code[i:i+len(keyword)] == keyword and self.code[i+len(keyword)] in next_chars["begin_keyword"]:
+                    argv = [LOOP_COND, keyword, i, line, step, keyword_i, keyword_line]
+                    i, line, step = self._parse_keyword(argv)
+                    self._update_scope_stack(line)
+                    break
+            
+            for scope in self.scope_stack[::-1]:
+                for ref in scope[2].keys():
+                    var_name = scope[2][ref][1]
+                    backtrack_i = i
+                    backtrack_line = line
+
+                    if self.code[i:i+len(var_name)] == var_name:
+                        argv = [LOOP_COND, ref, var_name, i, line, step, backtrack_i, backtrack_line]
+                        i, line, step, break_for_loop = self._parse_reference(argv)
+                        
+                        if break_for_loop:
+                            break
+            
+            i += 1
+            self._update_scope_stack(line)
+
+        return self.json_dict
+    
+    def _parse_section(self, init_i, init_line, init_step, end_i, end_line):  # DONE!
+        i = init_i
+        line = init_line
+        step = init_step
+        
+        LOOP_COND = lambda i: i < end_i
+        
+        while LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            
+            if line >= end_line:
+                break
+            
+            for dtype in cpp_data_types:
+                if self.code[i:i+len(dtype)] == dtype and self.code[i+len(dtype)] in next_chars["line_wspc"]:
+                    argv = [LOOP_COND, dtype, i, line, step]
+                    i, line, step = self._parse_dtype(argv)
+                    self._update_scope_stack(line)
+                    break
+            
+            for keyword in self.cpp_keywords_dict:
+                keyword_i = i
+                keyword_line = line
+                if self.code[i:i+len(keyword)] == keyword and self.code[i+len(keyword)] in next_chars["begin_keyword"]:
+                    argv = [LOOP_COND, keyword, i, line, step, keyword_i, keyword_line]
+                    i, line, step = self._parse_keyword(argv)
+                    self._update_scope_stack(line)
+                    break
+            
+            for scope in self.scope_stack[::-1]:
+                for ref in scope[2].keys():
+                    var_name = scope[2][ref][1]
+                    backtrack_i = i
+                    backtrack_line = line
+
+                    if self.code[i:i+len(var_name)] == var_name:
+                        argv = [LOOP_COND, ref, var_name, i, line, step, backtrack_i, backtrack_line]
+                        i, line, step, break_for_loop = self._parse_reference(argv)
+                        
+                        if break_for_loop:
+                            break
+            
+            i += 1
+            
+            print(f"self.code[i] = {self.code[i]}; line = {line}")
+            self._update_scope_stack(line)
+        
+        return i, line, step
+    
+    def _parse_dtype(self, argv: list):   # DONE!
+        LOOP_COND, dtype, i, line, step = argv
         
         i += len(dtype) + 1
         highlight = line
@@ -101,18 +214,16 @@ class Parser_CPP:
         while self.code[i] in next_chars["line_wspc"] and LOOP_COND(i):
             i += 1
 
-        argv = [i, line, step, highlight, name, dtype]
+        argv = [LOOP_COND, i, line, step, highlight, name, dtype]
         if self.code[i] in ["=", ";"]: # Means it's VAR_DECLARE
-            i, line = self._parse_VAR_DECLARE(argv)
+            i, line, step = self._parse_VAR_DECLARE(argv)
         elif self.code[i] == "(":   # Means it's FUNCT_DEFINE
-            i, line = self._parse_FUNCT_DEFINE(argv)
+            i, line, step = self._parse_FUNCT_DEFINE(argv)
         else:
             raise Exception("Error! Unknown dtype-init statement.")
         
-        step += 1
-
         return i, line, step
-    
+
     def _parse_keyword(self, argv: list):   # DONE!
         LOOP_COND, keyword, i, line, step, keyword_i, keyword_line = argv
         
@@ -120,9 +231,7 @@ class Parser_CPP:
         highlight = line
         
         argv = [LOOP_COND, i, line, step, highlight, keyword_i, keyword_line]
-        i, line = self.cpp_keywords_dict[keyword](argv)
-
-        step += 1
+        i, line, step = self.cpp_keywords_dict[keyword](argv)
 
         return i, line, step
 
@@ -208,7 +317,7 @@ class Parser_CPP:
         COMMENT_file.close()
 
         return self.code
-    
+
     def _pop_INCLUDE(self): # DONE!
         try:
             INCLUDE_file = open("./temp/_INCLUDE_file.txt", "w+")
@@ -328,105 +437,6 @@ class Parser_CPP:
         step += 1
 
         return backtrack_i, startLine, step
-
-    def _parse_VAR_DECLARE(self, argv: list):   # IN PROGRESS!
-        LOOP_COND, i, line, step, highlight, name, data_type = argv
-        
-        if self.code[i] == "=":
-            i += len("=")
-            while self.code[i] in next_chars["line_wspc"] and LOOP_COND(i):
-                i += 1
-            value_start = i
-            while self.code[i] != ";" and LOOP_COND(i):
-                i += 1
-            value_end = i
-            value = self.code[value_start:value_end]
-        else:   # self.code[i] == ";"
-            value = "__UNINITIALIZED__"   # Uninitialized variable case
-        
-        reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name
-
-        self.scope_stack[-1][2][reference] =  [data_type, name, value]
-        if value != "__UNINITIALIZED__":
-            # Temporary fix, implement scalable solution
-            if value == "true":
-                value = "True"
-            elif value == "false":
-                value = "False"
-            
-            exec(f"{reference} = {value}", globals())
-            # print(eval(reference))
-
-        executionSteps = self.json_dict["executionSteps"] 
-        executionSteps.append(
-            {
-                "step"      : step,
-                "highlight" : highlight,
-                "operation" : "VAR_DECLARE",
-                "reference" : reference,
-                "type"      : data_type,
-                "name"      : name,
-                "value"     : value
-            }
-        )
-        self.json_dict["executionSteps"] = executionSteps
-        
-        step += 1
-
-        return i, line, step
-
-    def _parse_VAR_UPDATE(self, argv: list):  # DONE!
-            LOOP_COND, i, line, step, highlight, reference, stmt_start = argv
-
-            while self.code[i] != ";" and LOOP_COND(i):
-                i += 1
-            stmt_end = i
-            
-            update_stmt = self.code[stmt_start:stmt_end]
-            #update_stmt = update_stmt.replace("=", " = ")
-            update_stmt_list = self.code[stmt_start:stmt_end].split()
-            
-            # print(f"update_stmt_list = {update_stmt_list}")
-            for scope in self.scope_stack[::-1]:
-                for ref in scope[2].keys():
-                    update_stmt_list = [ref if scope[2][ref][1] == x else x for x in update_stmt_list]
-
-                    # Quick fix, find scalable solution
-                    update_stmt_list = ["False" if x == "false" else x for x in update_stmt_list]
-                    update_stmt_list = ["True" if x == "true" else x for x in update_stmt_list]
-                try:
-                    data_type = scope[2][reference][0]
-                    name = scope[2][reference][1]
-                    old_value = scope[2][reference][2]
-
-                    target_scope = scope
-                except:
-                    pass
-            # print(f"update_stmt_list = {update_stmt_list}")
-            # print()
-            ref_update_stmt = " ".join(update_stmt_list)
-
-            exec(ref_update_stmt, globals())
-            new_value = str(eval(reference))
-            target_scope[2][reference][2] = new_value
-
-            executionSteps = self.json_dict["executionSteps"] 
-            executionSteps.append(
-                {
-                    "step"      : step,
-                    "highlight" : highlight,
-                    "operation" : "VAR_UPDATE",
-                    "reference" : reference,
-                    "type"      : data_type,  
-                    "name"      : name,
-                    "statement" : update_stmt,
-                    "old_value" : old_value,
-                    "new_value" : new_value
-                },
-            )
-            self.json_dict["executionSteps"] = executionSteps
-            
-            return i, line
 
     def _parse_VAR_DECLARE(self, argv: list):   # DONE!
         LOOP_COND, i, line, step, highlight, name, data_type = argv
