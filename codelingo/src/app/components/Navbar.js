@@ -57,7 +57,7 @@ export default function Navbar(props) {
     };
 
     return (
-        <div className="flex w-full justify-between items-center sticky top-0 z-50">
+        <div className="flex w-full justify-between bg-[#1d1f21] items-center sticky top-0 z-50">
             <div className="flex p-5 items-center cursor-pointer hover:scale-[1.1] duration-[200ms]" onClick={() => { router.push('/') }}>
                 <Image className='rounded-[50%] mr-[15px]' src={logo} width={50} height={50} alt='logo' />
                 <h1 className="text-3xl ">Code</h1><h1 className="text-3xl text-[#FF6B6B]">Lingo</h1>
