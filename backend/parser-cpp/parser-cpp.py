@@ -112,6 +112,100 @@ class Parser_CPP:
         step += 1
 
         return i, line, step
+    
+    def _pop_COMMENT(self): # DONE!
+        try:
+            COMMENT_file = open("./temp/_COMMENT_file.txt", "w+")
+        except:
+            raise Exception("Error. Could not create _COMMENT_file.txt file.")
+        
+        i = 0
+        line = 1
+        LOOP_COND = lambda i: i < len(self.code)
+
+        while LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            
+            if self.code[i:i+len("//")] == "//":
+                # print(f"LINE COMMENT DETECTED AT LINE {line}")
+                i += len("//")
+                while self.code[i] != "\n" and LOOP_COND(i):
+                    i += 1
+                COMMENT_file.write("\n")
+                line += 1
+                i += len("\n")
+
+            elif self.code[i:i+len("/*")] == "/*":
+                # print(f"MULTI-LINE COMMENT DETECTED AT LINE {line}")
+                i += len("/*")
+                while self.code[i:i+len("*/")] != "*/" and LOOP_COND(i):
+                    if self.code[i] == "\n":
+                        COMMENT_file.write("\n")
+                        line += 1
+                    i += 1
+                i += len("*/")
+
+            else:
+                COMMENT_file.write(self.code[i])
+                i += 1
+        
+        COMMENT_file.seek(0)
+        self.code = COMMENT_file.read()
+        COMMENT_file.close()
+
+        return self.code
+    
+    def _pop_INCLUDE(self): # DONE!
+        try:
+            INCLUDE_file = open("./temp/_INCLUDE_file.txt", "w+")
+        except:
+            raise Exception("Error. Could not create _INCLUDE_file.txt file.")
+        
+        i = 0
+        line = 1
+        
+        LOOP_COND = lambda i: i < len(self.code)
+        
+        while LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            
+            if self.code[i:i+len("#include")] == "#include" and self.code[i+len("#include")] in [" ", '\"', "<"]:
+                i += len("#include")
+                while self.code[i] != "\n" and LOOP_COND(i):
+                    if self.code[i] in ["<", '\"']:
+                        i += len("<")
+                        lib_name_start = i
+                        while self.code[i] not in [">", '\"']:
+                            i += 1
+                        lib_name_end = i
+                        lib_name = self.code[lib_name_start:lib_name_end]
+                    i += len("<")
+                i += len("\n")
+
+                executionSteps = self.json_dict["executionSteps"] 
+                executionSteps.append(
+                    {
+                        "highlight" : line,
+                        "operation" : "INCLUDE",
+                        "lib_name"  : lib_name,
+                    }
+                )
+                self.json_dict["executionSteps"] = executionSteps
+
+                INCLUDE_file.write("\n")
+                line += 1
+                
+            else:
+                INCLUDE_file.write(self.code[i])
+                i += 1
+
+        INCLUDE_file.seek(0)
+        self.code = INCLUDE_file.read()
+        INCLUDE_file.close()
+
+        return self.code
 
 if __name__ == "__main__":
     code_file = open("ideal_parser_test.cpp", 'r')
