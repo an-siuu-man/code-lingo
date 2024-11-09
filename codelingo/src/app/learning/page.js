@@ -18,7 +18,7 @@ import Sidebar from './Sidebar';
 
 export default function Learning() {
     return (
-        <div style={{ display: 'flex' }}>
+        <div className='flex'>
             {/* Sidebar component on the left */}
             <Sidebar />
 
