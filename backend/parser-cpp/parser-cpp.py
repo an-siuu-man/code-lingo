@@ -14,6 +14,7 @@ BUGS:   randomVar+= 12 gives issues. randomVar += 12 (notice space) does NOT.
         VARIABLE INITIALIZATION WITH OTHER VARIABLES!!!
 """
 
+from flask import Flask, jsonify, request
 import os
 import json
 
@@ -770,18 +771,18 @@ class Parser_CPP:
         result = str(raw_result)
 
         executionSteps = self.json_dict["executionSteps"] 
-        executionSteps.append(
-            {
-                "step"      : step,
-                "highlight" : highlight,
-                "operation" : "FOR_LOOP",
-                "statements": statements,
-                "condition" : condition,
-                "result"    : result,
-                "startLine" : startLine,
-                "endLine"   : endLine
-            }
-        )
+        # executionSteps.append(
+        #     {
+        #         "step"      : step,
+        #         "highlight" : highlight,
+        #         "operation" : "FOR_LOOP",
+        #         "statements": statements,
+        #         "condition" : condition,
+        #         "result"    : result,
+        #         "startLine" : startLine,
+        #         "endLine"   : endLine
+        #     }
+        # )
         self.json_dict["executionSteps"] = executionSteps
         
         scope_reference = f"__DECLAREDAT__{highlight}__WHILE_LOOP__"
@@ -796,10 +797,10 @@ class Parser_CPP:
 
         step += 1
 
-        if raw_result:
-            return start_while_i - 1, start_while_line, step
-        else:
-            return i, endLine, step
+        # if raw_result:
+        #     return start_while_i - 1, start_while_line, step
+        # else:
+        #     return i, endLine, step
 
     def _parse_while(self, argv: list): # DONE!
         LOOP_COND, i, line, step, highlight, start_while_i, start_while_line = argv[:7]
@@ -1008,17 +1009,23 @@ class Parser_CPP:
         self.jsonResponse = json.dumps(self.json_dict, indent=4)
         return self.jsonResponse
 
-if __name__ == "__main__":
-    code_file = open("ideal_parser_test.cpp", 'r')
 
-    parser = Parser_CPP(code_file)
-    parser.generate_json()
-    print()
-    print(f"parser.jsonResponse = \n{parser.jsonResponse}")
-    print()
-    scope_stack = json.dumps(parser.scope_stack, indent=4)
-    print(f"parser.scope_stack = \n{scope_stack}")
-    print()
-    scope_registry = json.dumps(parser.scope_registry, indent=4)
-    print(f"parser.scope_registry = \n{scope_registry}")
-    print()
+app = Flask(__name__)
+
+
+@app.route('/parse_string', methods=['POST'])
+def parse_code_string():
+    if request.method == 'POST':
+        code_string = request.json.get('code_string')
+        if not code_string:
+            return jsonify({"error": "No code string provided"}), 400
+        with open(os.path.join(os.path.dirname(__file__), 'temp_code.cpp'), 'w') as temp_code_file:
+            temp_code_file.write(code_string)
+        parser = Parser_CPP('temp_code.cpp')
+        parser.generate_json()
+        os.remove('temp_code.cpp')
+        return parser.jsonResponse
+
+if __name__ == "__main__":
+    app.run(port=5000)
+
