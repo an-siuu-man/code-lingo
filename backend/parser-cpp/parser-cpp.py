@@ -260,6 +260,75 @@ class Parser_CPP:
 
         return self.code
 
+    def _parse_FUNCT_DEFINE(self, argv: list):  # DONE!
+        LOOP_COND, i, line, step, highlight, name, return_type = argv
+        
+        if name == "main":
+            self.main_return_type = return_type
+        
+        if self.code[i] == "(":
+            i += len("(")
+        
+        args_start = i
+        while self.code[i] != ")" and LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            i += 1
+        args_end = i
+        
+        args = []
+        raw_args = self.code[args_start:args_end].split(",")
+        temp_list = [x.split("=") for x in raw_args]
+        for entry in temp_list:
+            final_entry = []
+            for x in entry:
+                final_entry.extend(x.split())
+            args.append(final_entry)
+
+        net_bracket_cnt = 0
+        while self.code[i] != "{" and LOOP_COND(i):
+            if self.code[i] == ";": # Means it's a function declaration, not definition!
+                return i, line, step
+            if self.code[i] == "\n":
+                line += 1
+            i += 1
+        backtrack_i = i
+        startLine = line
+        net_bracket_cnt += 1
+
+        while net_bracket_cnt != 0 and LOOP_COND(i):
+            i += 1
+            if self.code[i] == "\n":
+                line += 1
+            
+            if self.code[i] == "{":
+                net_bracket_cnt += 1
+            elif self.code[i] == "}":
+                net_bracket_cnt -= 1
+        endLine = line
+
+        executionSteps = self.json_dict["executionSteps"] 
+        executionSteps.append(
+            {
+                "step"          : step,
+                "highlight"     : highlight,
+                "operation"     : "FUNCT_DEFINE",
+                "name"          : name,
+                "return_type"   : return_type,
+                "args"          : args,
+                "startLine"     : startLine,
+                "endLine"       : endLine,
+            }
+        )
+        self.json_dict["executionSteps"] = executionSteps
+        
+        scope_reference = f"__{return_type}__{name}()__"
+        self.scope_stack.append([scope_reference, endLine, {}])
+
+        step += 1
+
+        return backtrack_i, startLine, step
+
 if __name__ == "__main__":
     code_file = open("ideal_parser_test.cpp", 'r')
 
