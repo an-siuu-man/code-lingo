@@ -67,14 +67,14 @@ export default function Navbar(props) {
                 <>
                     {pathname.includes('/learning') && (
                         <>
-                            <Link href="/learning" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[#FCA204]`}>Learning</Link>
-                            <Link href="/training" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[white]`}>Training</Link>
+                            <Link href="/learning/Hello World Program" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[#FCA204]`}>Learning</Link>
+                            <Link href="/training/Hello World Challenge" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[white]`}>Training</Link>
                         </>
                     )}
                     {pathname.includes('/training') && (
                         <>
                             <Link href="/learning/Hello World Program" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[white]`}>Learning</Link>
-                            <Link href="/training" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[#FCA204]`}>Training</Link>
+                            <Link href="/training/Hello World Challenge" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[#FCA204]`}>Training</Link>
                         </>
                     )}
 
