@@ -7,7 +7,8 @@ export async function GET(req) {
     // Query to fetch topics and sections
     const sql = `
       SELECT topic, section
-      FROM cpp_training;
+      FROM cpp_training
+      WHERE level = 1;
     `;
     
     const { rows } = await Query(sql);

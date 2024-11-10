@@ -73,13 +73,15 @@ export default function Training() {
             <div className='absolute left-[5vw] w-[95vw] items-right flex-grow' style={{ backgroundColor: '#1e1e1e', color: 'white', minHeight: '100vh' }}>
                 <Navbar />
                 <div className='flex justify-between w-[90%] '>
-                    <h1>Training Page</h1>
-                    <div>
-                        <h1 className='text-center'>Challenge Level</h1>
+                    <div className='flex flex-row items-center'>
+                    <h1 className='training-header text-6xl font-[poppins] mr-4'>Training</h1><h1 className='training-header text-6xl font-[poppins] text-[#ff6b6b]'>Page</h1>
+                    </div>
+                    <div className=''>
+                        <h1 className='text-center text-2xl'>Challenge Level</h1>
                         <ul className='flex flex-row justify-between '>
-                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 1)}} className={`${selectedLevel === 1 ? 'bg-[#ff6b6]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 1</li>
-                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 2)}} className={`${selectedLevel === 2 ? 'bg-[#ff6b6]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 2</li>
-                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 3)}} className={`${selectedLevel === 3 ? 'bg-[#ff6b6]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 3</li>
+                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 1), setSelectedLevel(1)}} className={`${selectedLevel  === 1 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 1</li>
+                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 2), setSelectedLevel(2)}} className={`${selectedLevel  === 2 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 2</li>
+                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 3), setSelectedLevel(3)}} className={`${selectedLevel  === 3 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 3</li>
                         </ul>
                     </div>
                 </div>
@@ -94,12 +96,12 @@ export default function Training() {
 
                 {/* Flex container for Editor and Terminal side by side */}
                 <div
-                    className="mt-[2vw] flex h-[500px] w-[100%] space-x-4"
+                    className="mt-[2vw] flex h-[500px] w-[95%] space-x-4"
                     style={{ fontFamily: 'source code pro' }}
 >
                     {/* EditorMonaco on the left */}
                     <div
-                        className="flex-grow p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
+                        className="flex-grow p-4 h-[fit-content] bg-[#2e2e2e] rounded-lg shadow-lg"
                         style={{
                             width: '600px',
                             borderRadius: '8px', // Rounded corners
@@ -111,9 +113,10 @@ export default function Training() {
                     <div
                         className="flex-grow p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
                         style={{
-                            width: '600px',
+                            height: 'fit-content',
+                            width: '750px',
                             borderRadius: '8px', // Rounded corners
-                            overflow: 'hidden', // Prevents overflow for rounded edges
+                            overflow: '', // Prevents overflow for rounded edges
                         }}>
                         <TerminalComp />
                     </div>
