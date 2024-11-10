@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# --- CODELINGO C++ PARSER ---
+# --- CODELINGO C++/C PARSER ---
 # Author: Leo Cabezas Amigo
+# Version: 1.0.1 (ready for HackKState!)
 
 """
-IDEAS: Implement pointers, references, arrays
+IDEAS: Implement pointers, references, arrays, etc.
 """
-
 """
-ISSUES: '\n'-type whitespaces are not contemplated properly in dtype, keyword, var_name statements
-        ELSE-IF BLOCKS NOT IMPLEMENTED!!!
-BUGS:   int i = 0, j = 5; NOT CONTEMPLATED!!!
-        VARIABLE INITIALIZATION WITH OTHER VARIABLES!!!
+FUTURE TO/DO:
+    VAR_DECLARE and VAR_UPDATE of the form 'int i = ++j' are not contemplated.
+    Single-line multiple VAR_DECLARE (e.g. 'int i=0, j=1') is not contemplated.
+    FUNC_DEFINE is not useful, since function evaluations are not contemplated.
+    Need to implement remaining keyword functions as well.
 """
 
 from flask import Flask, jsonify, request
@@ -66,16 +67,17 @@ class Parser_CPP:
         self.jsonResponse = ""
 
         self.cpp_keywords_dict = {
-            "if"        : self._parse_if,
-            "else"      : self._parse_else,
+            "if"        : self._parse_if,       # IMPLEMENTED
+            "else if"   : self._parse_elseif,   # IMPLEMENTED
+            "else"      : self._parse_else,     # IMPLEMENTED
             "switch"    : self._parse_switch,
             "case"      : self._parse_case,
             "default"   : self._parse_default,
-            "for"       : self._parse_for,
-            "while"     : self._parse_while,
+            "for"       : self._parse_for,      # IMPLEMENTED
+            "while"     : self._parse_while,    # IMPLEMENTED
             "do"        : self._parse_dowhile,
-            "break"     : self._parse_break,
-            "continue"  : self._parse_continue,
+            "break"     : self._parse_break,    # IMPLEMENTED
+            "continue"  : self._parse_continue, # IMPLEMENTED
             "return"    : self._parse_return,
             "goto"      : self._parse_goto,
             "throw"     : self._parse_throw,
@@ -382,7 +384,7 @@ class Parser_CPP:
 
         return self.code
 
-    def _parse_FUNCT_DEFINE(self, argv: list):  # DONE!
+    def _parse_FUNCT_DEFINE(self, argv: list):  # IN PROGRESS!
         LOOP_COND, i, line, step, highlight, name, return_type = argv
         
         if name == "main":
@@ -453,7 +455,7 @@ class Parser_CPP:
 
         return backtrack_i, startLine, step
 
-    def _parse_VAR_DECLARE(self, argv: list):   # IN PROGRESS!
+    def _parse_VAR_DECLARE(self, argv: list):   # DONE!
         LOOP_COND, i, line, step, highlight, name, data_type = argv
         
         if self.code[i] == "=":
@@ -464,13 +466,75 @@ class Parser_CPP:
             while self.code[i] != ";" and LOOP_COND(i):
                 i += 1
             value_end = i
-            value = self.code[value_start:value_end]
+            value_str = self.code[value_start:value_end]
+            
+            j = 0
+            break_signal = False
+            wsp_value_str = ""
+            while j < len(value_str):
+                for op in next_chars["evaluate"]:
+                    if value_str[j:j+len(op)] == op:
+                        substr = " " + op + " "
+                        wsp_value_str += substr
+                        
+                        j += len(op)
+                        if j >= len(value_str):
+                            break_signal = True
+                        
+                        break
+                if break_signal:
+                    break
+
+                wsp_value_str += value_str[j]
+                j += 1
+
+            value_list = wsp_value_str.split()
+            value_list_corr = []
+            for k in range(len(value_list)):
+                if value_list[k] == "++":
+                    if k == 0:
+                        value_list_corr.append(value_list[k+1])
+                        value_list_corr.extend(["+", "1"])
+                        break
+                    else:
+                        value_list_corr.extend(["+", "1"])
+                        break
+                elif value_list[k] == "--":
+                    if k == 0:
+                        value_list_corr.append(value_list[k+1])
+                        value_list_corr.extend(["-", "1"])
+                        break
+                    else:
+                        value_list_corr.extend(["-", "1"])
+                        break
+                else:
+                    value_list_corr.append(value_list[k])
+
+            value_stmt = ""
+            for l in range(len(value_list)):
+                if l == 0 or value_list[l] in ["++", "--"]:
+                    value_stmt += value_list[l]
+                elif l != 0 and value_list[l-1] in ["++", "--"]:
+                    value_stmt += value_list[l]
+                else: 
+                    value_stmt += " " + value_list[l]
+            
+            for scope in self.scope_stack[::-1]:
+                for ref in scope[2].keys():
+                    value_list_corr = [ref if scope[2][ref][1] == x else x for x in value_list_corr]
+
+                    # Quick fix, find scalable solution
+                    value_list_corr = ["False" if x == "false" else x for x in value_list_corr]
+                    value_list_corr = ["True" if x == "true" else x for x in value_list_corr]
+            ref_value_stmt = " ".join(value_list_corr)
+            
+            if ref_value_stmt.strip("\"").isalnum():
+                value = ref_value_stmt
+            else:
+                value = eval(ref_value_stmt, globals())
         else:   # self.code[i] == ";"
             value = "__UNINITIALIZED__"   # Uninitialized variable case
         
-        
-
-
         reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name + "__"     
         self.scope_stack[-1][2][reference] =  [data_type, name, value]
 
@@ -482,7 +546,6 @@ class Parser_CPP:
                 value = "False"
             
             exec(f"{reference} = {value}", globals())
-            # print(eval(reference))
 
         scope = self.scope_stack[-1][0]
         executionSteps = self.json_dict["executionSteps"] 
@@ -680,14 +743,14 @@ class Parser_CPP:
                 "operation" : "IF_BLOCK",
                 "reference" : scope_reference,
                 "condition" : condition,
-                "executed"    : result,
+                "executed"  : result,
                 "startLine" : startLine,
                 "endLine"   : endLine,
                 "scope"     : scope
             }
         )
         self.json_dict["executionSteps"] = executionSteps
-        self.scope_stack.append([scope_reference, endLine, {}, raw_result])
+        self.scope_stack.append([scope_reference, endLine, {}, raw_result, scope])
 
         step += 1
         
@@ -695,7 +758,107 @@ class Parser_CPP:
             return backtrack_i, startLine, step
         else:
             return i, endLine, step
+    
+    def _parse_elseif(self, argv: list):    # DONE!
+        LOOP_COND, i, line, step, highlight = argv[:5]
+
+        while self.code[i] in next_chars["line_wspc"] and LOOP_COND(i):
+            i += 1
+        if self.code[i] == "(":
+            i += len("(")
+        cond_start = i
+        while self.code[i] != ")" and LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            i += 1
+        cond_end = i
         
+        condition = self.code[cond_start:cond_end]
+
+        net_bracket_cnt = 0
+        while self.code[i] != "{" and LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            i += 1
+        backtrack_i = i
+        startLine = line
+        net_bracket_cnt += 1
+
+        while net_bracket_cnt != 0 and LOOP_COND(i):
+            i += 1
+            if self.code[i] == "\n":
+                line += 1
+            
+            if self.code[i] == "{":
+                net_bracket_cnt += 1
+            elif self.code[i] == "}":
+                net_bracket_cnt -= 1
+        endLine = line
+
+        j = 0
+        break_signal = False
+        wsp_condition = ""
+        while j < len(condition):
+            for op in next_chars["evaluate"]:
+                if condition[j:j+len(op)] == op:
+                    substr = " " + op + " "
+                    wsp_condition += substr
+                    
+                    j += len(op)
+                    if j >= len(condition):
+                        break_signal = True
+                    
+                    break
+            if break_signal:
+                break
+
+            wsp_condition += condition[j]
+            j += 1
+
+        eval_stmt_list = wsp_condition.split()
+        condition = " ".join(eval_stmt_list)
+
+        for scope in self.scope_stack[::-1]:
+            for ref in scope[2].keys():
+                eval_stmt_list = [ref if scope[2][ref][1] == x else x for x in eval_stmt_list]
+        ref_eval_stmt = " ".join(eval_stmt_list)
+
+        raw_result = eval(ref_eval_stmt)
+        result = str(raw_result)
+
+        scope_reference = f"__DECLAREDAT__{highlight}__ELSEIF_BLOCK__"
+        prev_scope = self.scope_stack[-1]
+        if not (prev_scope[0].endswith("__IF_BLOCK__") or prev_scope[0].endswith("__ELSEIF_BLOCK__")):
+            raise Exception("Error! ELSEIF BLOCK WITHOUT PRECEDING IF/ELSEIF BLOCK")
+        any_executed = prev_scope[3]
+        scope = prev_scope[4]
+        execute =  not any_executed and raw_result
+        any_executed = any_executed or execute
+
+        executionSteps = self.json_dict["executionSteps"] 
+        executionSteps.append(
+            {
+                "step"      : step,
+                "highlight" : highlight,
+                "operation" : "ELSEIF_BLOCK",
+                "reference" : scope_reference,
+                "condition" : condition,
+                "executed"  : str(execute),
+                "startLine" : startLine,
+                "endLine"   : endLine,
+                "scope"     : scope
+            }
+        )
+        self.json_dict["executionSteps"] = executionSteps
+        self.scope_stack.append([scope_reference, endLine, {}, any_executed, scope])
+
+        step += 1
+        
+        if execute:
+            return backtrack_i, startLine, step
+        else:
+            return i, endLine, step
+
     def _parse_else(self, argv: list):  # DONE!
         LOOP_COND, i, line, step, highlight = argv[:5]
 
@@ -719,13 +882,13 @@ class Parser_CPP:
                 net_bracket_cnt -= 1
         endLine = line
 
-        scope_reference = f"__DECLAREDAT__{highlight}__ELSE_BLOCK__"
-        scope = self.scope_stack[-1][0]
-        
+        scope_reference = f"__DECLAREDAT__{highlight}__ELSE_BLOCK__"       
         prev_scope = self.scope_stack[-1]
-        if not prev_scope[0].endswith("__IF_BLOCK__"):
-            raise Exception("Error! ELSE BLOCK WITHOUT PRECEDING")
-        executed = not prev_scope[3]
+        if not (prev_scope[0].endswith("__IF_BLOCK__") or prev_scope[0].endswith("__ELSEIF_BLOCK__")):
+            raise Exception("Error! ELSE BLOCK WITHOUT PRECEDING IF/ELSEIF BLOCK")
+        any_executed = prev_scope[3]
+        scope = prev_scope[4]
+        executed = not any_executed
 
         executionSteps = self.json_dict["executionSteps"] 
         executionSteps.append(
@@ -1235,4 +1398,20 @@ def parse_code_string():
         return retJSON
 
 if __name__ == "__main__":
+#     code_file = open("ideal_parser_test.cpp", 'r')
+
+#     parser = Parser_CPP(code_file)
+#     parser.generate_json()
+#     print()
+#     scope_stack = json.dumps(parser.scope_stack, indent=4)
+#     print(f"parser.scope_stack = \n{scope_stack}")
+#     print()
+#     scope_registry = json.dumps(parser.scope_registry, indent=4)
+#     print(f"parser.scope_registry = \n{scope_registry}")
+#     print()
+#     print(f"parser.jsonResponse = \n{parser.jsonResponse}")
+#     print()
+    
+    
+
     app.run(port=5000)
