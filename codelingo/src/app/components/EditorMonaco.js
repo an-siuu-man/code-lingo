@@ -129,7 +129,7 @@ const EditorMonaco = ({ setIncomingJSON }) => {
   return (
     <div>
       <Editor
-        height="600px"
+        height="300px"
         defaultLanguage="cpp"
         defaultValue={`#include <iostream>\nint main() {\n  // Print "Hello World" here\n  return 0;\n}`}
         value={code}
