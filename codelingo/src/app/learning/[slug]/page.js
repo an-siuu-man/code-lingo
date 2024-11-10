@@ -44,7 +44,9 @@ export default function Learning() {
             {/* Main content area for the Learning page */}
             <div className='absolute left-[5vw] w-[95vw] items-right flex-grow' style={{ backgroundColor: '#1e1e1e', color: 'white', minHeight: '100vh' }}>
             <Navbar />
-            <h1>Learning Page</h1>
+            <div className='flex flex-row items-center mb-[1vw]'>
+            <h1 className='training-header text-5xl font-[poppins] my-6 mr-4'>Learning</h1><h1 className='training-header text-5xl font-[poppins] text-[#ff6b6b] my-6' >Page</h1>
+            </div>
                 <div className='mr-[2vw] flex-grow p-4 bg-[#2e2e2e] rounded-lg shadow-lg'>
                     <EditorMonaco  readOnly={false} height='450px' width='50%' incomingCode = {incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
 

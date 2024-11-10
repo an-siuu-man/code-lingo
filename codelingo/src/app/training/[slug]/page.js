@@ -74,7 +74,7 @@ export default function Training() {
                 <Navbar />
                 <div className='flex justify-between w-[90%] '>
                     <div className='flex flex-row items-center'>
-                    <h1 className='training-header text-6xl font-[poppins] mr-4'>Training</h1><h1 className='training-header text-6xl font-[poppins] text-[#ff6b6b]'>Page</h1>
+                    <h1 className='training-header text-5xl font-[poppins] mr-4'>Training</h1><h1 className='training-header text-5xl font-[poppins] text-[#ff6b6b]'>Page</h1>
                     </div>
                     <div className=''>
                         <h1 className='text-center text-2xl'>Challenge Level</h1>
