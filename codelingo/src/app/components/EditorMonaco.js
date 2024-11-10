@@ -206,8 +206,8 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height=
         }}
       />
       {!readOnly && (
-        <div className='py-4 flex justify-end w-full'>
-          <PageButton label="Submit" handleClick={handleSubmit} />
+        <div className='py-4 flex justify-start w-full'>
+          <PageButton label="Submit" className='' />
         </div>
       )}
     </div>
