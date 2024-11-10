@@ -1,12 +1,12 @@
-const { Query } = require('../db'); // Correct import for the query function
+const { Query } = require('../db');
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {
-    console.log('Request:', req);
+  console.log('Request:', req);
   try {
     // Query to fetch topics and sections
     const sql = `
-      SELECT topic, section
+      SELECT topic, section, content, code
       FROM cpp_data;
     `;
     
@@ -18,7 +18,10 @@ export async function GET(req) {
       if (!acc[row.topic]) {
         acc[row.topic] = []; // Initialize an array for each topic
       }
-      acc[row.topic].push(row.section); // Push each section to its respective topic array
+      acc[row.topic].push({
+        section: row.section
+      }); // Group section, content, and code under each topic
+      
       return acc;
     }, {});
 
@@ -27,6 +30,39 @@ export async function GET(req) {
 
   } catch (error) {
     console.error('Error fetching topics and sections:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+// POST route to retrieve data based on a specific section
+export async function POST(req) {
+  try {
+    // Parse the request body to get the section name
+    const { section } = await req.json();
+    if (!section) {
+      return NextResponse.json({ error: 'Section parameter is required' }, { status: 400 });
+    }
+
+    // SQL query to fetch content and code based on the section
+    const sql = `
+      SELECT section, content, code
+      FROM cpp_data
+      WHERE section = $1;
+    `;
+
+    // Execute the query with the section parameter
+    const { rows } = await Query(sql, [section]);
+
+    // Check if any rows are returned
+    if (rows.length === 0) {
+      return NextResponse.json({ error: 'No data found for the specified section' }, { status: 404 });
+    }
+
+    // Return the JSON response with the data
+    return NextResponse.json(rows[0]);
+
+  } catch (error) {
+    console.error('Error fetching data for section:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
