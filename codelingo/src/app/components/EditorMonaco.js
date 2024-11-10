@@ -7,6 +7,8 @@ import PageButton from './PageButton';
 import axios from 'axios';
 
 const EditorMonaco = ({ setIncomingJSON, incomingCode }) => {
+
+  console.log('Incoming Code:', incomingCode);
   const [code, setCode] = useState(incomingCode || ''); // State to store editor content
 
   function handleEditorDidMount(editor, monaco) {
@@ -112,6 +114,7 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode }) => {
 
   async function handleSubmit() {
     try {
+      console.log('Submitting code:', code);
       const response = await axios.post('/api/generate', { code }, {
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +135,7 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode }) => {
         height="300px"
         defaultLanguage="cpp"
         defaultValue={`#include <iostream>\nint main() {\n  // Print "Hello World" here\n  return 0;\n}`}
-        value={code}
+        value={incomingCode}
         onMount={handleEditorDidMount}
         onChange={handleEditorChange} // Directly use `handleEditorChange`
       />
