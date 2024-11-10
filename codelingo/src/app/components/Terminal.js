@@ -13,9 +13,11 @@ export default function TerminalComp() {
         const xterm = new Terminal({
             cursorBlink: true,
             theme: {
-                background: "#282c34",
-                foreground: "#abb2bf",
+                background: "#0d0d0d", // Dark background for terminal (Matrix-style black)
+                foreground: "#73cf72", // Bright neon green text
+                cursor: "#73cf72", // Bright green cursor
             },
+
         });
         const fitAddon = new FitAddon();
         xterm.loadAddon(fitAddon);
@@ -142,5 +144,5 @@ export default function TerminalComp() {
         };
     }, []); // Empty dependency array ensures useEffect runs only once
 
-    return <div ref={terminalRef} style={{ width: "100%", height: "400px" }} />;
+    return <div ref={terminalRef} style={{ width: "700px", height: "410px" }} />;
 }

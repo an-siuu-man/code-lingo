@@ -49,7 +49,8 @@ export default function Learning() {
                 {/* Placeholder for additional sections or components */}
                 <div>
                     <p>Welcome to the Learning Page. Here, you'll learn about {incomingJSON.content}</p>
-                    <EditorMonaco incomingCode = {incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
+                    <EditorMonaco readOnly={false} height='500px' incomingCode = {incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
+
                 </div>
             </div>
         </div>
