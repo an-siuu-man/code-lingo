@@ -72,7 +72,7 @@ return (
       >
           <Navbar />
           <div className='flex flex-row items-center my-4'>
-                    <h1 className='training-header text-5xl font-[poppins] mr-4'>Learning</h1><h1 className='training-header text-5xl font-[poppins] text-[#ff6b6b]'>Page</h1>
+                    <h1 className='training-header text-5xl font-[poppins] mr-4 mb-8'>Learning</h1><h1 className='training-header text-5xl font-[poppins] text-[#ff6b6b] mb-8'>Page</h1>
                     </div>
           {/* Container for Editor and Visualization side-by-side */}
           <div
