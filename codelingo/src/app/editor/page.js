@@ -12,7 +12,7 @@ export default function MonEditor() {
     <div>
       <div className='mt-10 w-[50%]'>
         {/* Pass setIncomingJSON to EditorMonaco */}
-        <EditorMonaco setIncomingJSON={setIncomingJSON} />
+        <EditorMonaco height='500px'setIncomingJSON={setIncomingJSON} />
       </div>
 
       {/* Pass incomingJSON as prop to JSONDisplay component */}

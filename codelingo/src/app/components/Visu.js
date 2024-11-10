@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-const data =  {
-    "code": "#include <iostream>\nint main() {\n  int leo = 0;\n  int jay = 10;\n  for (int i = 0; i < 10; i = i + 1 ){\n    leo = leo + i;\n    if (leo == 9){\n      int shivansh = 10;\n    } else {\n      jay = jay - i;\n    }\n    float ansuman = 99.1;\n  }\n  int sax = -1;\n  return 0;\n}",
+const data ={
+    "code": "#include <iostream>\nint main() {\n  int leo = 0;\n  int jay = 10;\n  for (int i = 0; i < 10; i++ ){\n    leo = leo + i;\n    if (i == 9){\n      int shivansh = 10;\n    } else {\n      jay = jay - i;\n    }\n    float ansuman = 99.1;\n  }\n  int sax = -1;\n  return 0;\n}\n\n",
     "executionSteps": [
         {
             "highlight": 1,
@@ -26,7 +26,7 @@ const data =  {
             "step": 2,
             "highlight": 3,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "value": "0",
@@ -36,7 +36,7 @@ const data =  {
             "step": 3,
             "highlight": 4,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "value": "10",
@@ -46,7 +46,7 @@ const data =  {
             "step": 4,
             "highlight": 5,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
             "value": "0",
@@ -60,7 +60,7 @@ const data =  {
             "statements": [
                 "int i = 0",
                 "i < 10",
-                "i = i + 1"
+                "i++"
             ],
             "condition": "i < 10",
             "result": "True",
@@ -72,7 +72,7 @@ const data =  {
             "step": 5,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -84,36 +84,27 @@ const data =  {
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
             "step": 7,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
+            "highlight": 9,
+            "operation": "ELSE_BLOCK",
+            "executed": "True",
+            "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
+            "startLine": 9,
+            "endLine": 11,
             "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
             "step": 8,
-            "highlight": 9,
-            "operation": "ELSE_BLOCK",
-            "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
-            "startLine": 9,
-            "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
-        },
-        {
-            "step": 9,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -121,31 +112,31 @@ const data =  {
             "new_value": "10"
         },
         {
-            "step": 10,
+            "step": 9,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 11,
+            "step": 10,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "0",
             "new_value": "1"
         },
         {
-            "step": 11,
+            "step": 10,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -153,40 +144,31 @@ const data =  {
             "new_value": "1"
         },
         {
-            "step": 12,
+            "step": 11,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 13,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 14,
+            "step": 12,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 15,
+            "step": 13,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -194,31 +176,31 @@ const data =  {
             "new_value": "9"
         },
         {
-            "step": 16,
+            "step": 14,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 17,
+            "step": 15,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "1",
             "new_value": "2"
         },
         {
-            "step": 17,
+            "step": 15,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -226,40 +208,31 @@ const data =  {
             "new_value": "3"
         },
         {
-            "step": 18,
+            "step": 16,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 19,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 20,
+            "step": 17,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 21,
+            "step": 18,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -267,31 +240,31 @@ const data =  {
             "new_value": "7"
         },
         {
-            "step": 22,
+            "step": 19,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 23,
+            "step": 20,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "2",
             "new_value": "3"
         },
         {
-            "step": 23,
+            "step": 20,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -299,40 +272,31 @@ const data =  {
             "new_value": "6"
         },
         {
-            "step": 24,
+            "step": 21,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 25,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 26,
+            "step": 22,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 27,
+            "step": 23,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -340,31 +304,31 @@ const data =  {
             "new_value": "4"
         },
         {
-            "step": 28,
+            "step": 24,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 29,
+            "step": 25,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "3",
             "new_value": "4"
         },
         {
-            "step": 29,
+            "step": 25,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -372,40 +336,31 @@ const data =  {
             "new_value": "10"
         },
         {
-            "step": 30,
+            "step": 26,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 31,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 32,
+            "step": 27,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 33,
+            "step": 28,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -413,31 +368,31 @@ const data =  {
             "new_value": "0"
         },
         {
-            "step": 34,
+            "step": 29,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 35,
+            "step": 30,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "4",
             "new_value": "5"
         },
         {
-            "step": 35,
+            "step": 30,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -445,40 +400,31 @@ const data =  {
             "new_value": "15"
         },
         {
-            "step": 36,
+            "step": 31,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 37,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 38,
+            "step": 32,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 39,
+            "step": 33,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -486,31 +432,31 @@ const data =  {
             "new_value": "-5"
         },
         {
-            "step": 40,
+            "step": 34,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 41,
+            "step": 35,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "5",
             "new_value": "6"
         },
         {
-            "step": 41,
+            "step": 35,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -518,40 +464,31 @@ const data =  {
             "new_value": "21"
         },
         {
-            "step": 42,
+            "step": 36,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 43,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 44,
+            "step": 37,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 45,
+            "step": 38,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -559,31 +496,31 @@ const data =  {
             "new_value": "-11"
         },
         {
-            "step": 46,
+            "step": 39,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 47,
+            "step": 40,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "6",
             "new_value": "7"
         },
         {
-            "step": 47,
+            "step": 40,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -591,40 +528,31 @@ const data =  {
             "new_value": "28"
         },
         {
-            "step": 48,
+            "step": 41,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 49,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 50,
+            "step": 42,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 51,
+            "step": 43,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -632,31 +560,31 @@ const data =  {
             "new_value": "-18"
         },
         {
-            "step": 52,
+            "step": 44,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 53,
+            "step": 45,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "7",
             "new_value": "8"
         },
         {
-            "step": 53,
+            "step": 45,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -664,40 +592,31 @@ const data =  {
             "new_value": "36"
         },
         {
-            "step": 54,
+            "step": 46,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "False",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 55,
-            "highlight": 8,
-            "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
-            "type": "int",
-            "name": "shivansh",
-            "value": "10",
-            "scope": "__DECLAREDAT__7__IF_BLOCK__"
-        },
-        {
-            "step": 56,
+            "step": 47,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "True",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 57,
+            "step": 48,
             "highlight": 10,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
+            "reference": "__DECLAREDAT__4__NAME__jay__",
             "type": "int",
             "name": "jay",
             "statement": "jay = jay - i",
@@ -705,31 +624,31 @@ const data =  {
             "new_value": "-26"
         },
         {
-            "step": 58,
+            "step": 49,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 59,
+            "step": 50,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "8",
             "new_value": "9"
         },
         {
-            "step": 59,
+            "step": 50,
             "highlight": 6,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__3__NAME__leo",
+            "reference": "__DECLAREDAT__3__NAME__leo__",
             "type": "int",
             "name": "leo",
             "statement": "leo = leo + i",
@@ -737,72 +656,62 @@ const data =  {
             "new_value": "45"
         },
         {
-            "step": 60,
+            "step": 51,
             "highlight": 7,
             "operation": "IF_BLOCK",
             "reference": "__DECLAREDAT__7__IF_BLOCK__",
-            "condition": "leo == 9",
-            "result": "False",
+            "condition": "i == 9",
+            "executed": "True",
             "startLine": 7,
             "endLine": 9,
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 61,
+            "step": 52,
             "highlight": 8,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__8__NAME__shivansh",
+            "reference": "__DECLAREDAT__8__NAME__shivansh__",
             "type": "int",
             "name": "shivansh",
             "value": "10",
             "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 62,
+            "step": 53,
             "highlight": 9,
             "operation": "ELSE_BLOCK",
+            "executed": "False",
             "reference": "__DECLAREDAT__9__ELSE_BLOCK__",
             "startLine": 9,
             "endLine": 11,
-            "scope": "__DECLAREDAT__5__FOR_LOOP__"
+            "scope": "__DECLAREDAT__7__IF_BLOCK__"
         },
         {
-            "step": 63,
-            "highlight": 10,
-            "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__4__NAME__jay",
-            "type": "int",
-            "name": "jay",
-            "statement": "jay = jay - i",
-            "old_value": "-26",
-            "new_value": "-35"
-        },
-        {
-            "step": 64,
+            "step": 54,
             "highlight": 12,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__12__NAME__ansuman",
+            "reference": "__DECLAREDAT__12__NAME__ansuman__",
             "type": "float",
             "name": "ansuman",
             "value": "99.1",
             "scope": "__DECLAREDAT__5__FOR_LOOP__"
         },
         {
-            "step": 65,
+            "step": 55,
             "highlight": 5,
             "operation": "VAR_UPDATE",
-            "reference": "__DECLAREDAT__5__NAME__i",
+            "reference": "__DECLAREDAT__5__NAME__i__",
             "type": "int",
             "name": "i",
-            "statement": "i = i + 1",
+            "statement": "i++",
             "old_value": "9",
             "new_value": "10"
         },
         {
-            "step": 65,
+            "step": 55,
             "highlight": 14,
             "operation": "VAR_DECLARE",
-            "reference": "__DECLAREDAT__14__NAME__sax",
+            "reference": "__DECLAREDAT__14__NAME__sax__",
             "type": "int",
             "name": "sax",
             "value": "-1",
@@ -819,7 +728,8 @@ const VisualizationPage = () => {
   useEffect(() => {
     // Function to process each step
     const processStep = (step) => {
-      const { operation, reference, name, value, new_value, condition, result, scope } = step;
+      const { operation, reference, name, value, new_value, condition, executed, scope } = step;
+
       setVariables((prevVars) => {
         const updatedVars = { ...prevVars };
 
@@ -832,10 +742,11 @@ const VisualizationPage = () => {
           updatedVars[reference].label = `${name} = ${new_value}`;
         } else if (operation === 'IF_BLOCK') {
           updatedVars[reference] = {
-            label: `IF (${condition}: ${result})`,
+            label: `IF (${condition}: ${executed === "True" ? "True" : "False"})`,
             scope
           };
         } else if (operation === 'ELSE_BLOCK') {
+          // Simply display the ELSE block
           updatedVars[reference] = {
             label: `ELSE`,
             scope
