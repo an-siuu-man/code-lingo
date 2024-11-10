@@ -2,6 +2,7 @@
 
 # --- CODELINGO C++/C PARSER ---
 # Author: Leo Cabezas Amigo
+# Version: 1.0.1 (ready for HackKState!)
 
 """
 IDEAS: Implement pointers, references, arrays, etc.
@@ -382,7 +383,7 @@ class Parser_CPP:
 
         return self.code
 
-    def _parse_FUNCT_DEFINE(self, argv: list):  # DONE!
+    def _parse_FUNCT_DEFINE(self, argv: list):  # IN PROGRESS!
         LOOP_COND, i, line, step, highlight, name, return_type = argv
         
         if name == "main":
@@ -526,7 +527,6 @@ class Parser_CPP:
                     value_list_corr = ["True" if x == "true" else x for x in value_list_corr]
             ref_value_stmt = " ".join(value_list_corr)
             
-            print(f"ref_value_stmt = {ref_value_stmt}")
             if ref_value_stmt.strip("\"").isalnum():
                 value = ref_value_stmt
             else:
@@ -749,7 +749,7 @@ class Parser_CPP:
             }
         )
         self.json_dict["executionSteps"] = executionSteps
-        self.scope_stack.append([scope_reference, endLine, {}, raw_result])
+        self.scope_stack.append([scope_reference, endLine, {}, raw_result, scope])
 
         step += 1
         
@@ -826,12 +826,11 @@ class Parser_CPP:
         result = str(raw_result)
 
         scope_reference = f"__DECLAREDAT__{highlight}__ELSEIF_BLOCK__"
-        scope = self.scope_stack[-1][0]
-
         prev_scope = self.scope_stack[-1]
         if not (prev_scope[0].endswith("__IF_BLOCK__") or prev_scope[0].endswith("__ELSEIF_BLOCK__")):
             raise Exception("Error! ELSEIF BLOCK WITHOUT PRECEDING IF/ELSEIF BLOCK")
         any_executed = prev_scope[3]
+        scope = prev_scope[4]
         execute =  not any_executed and raw_result
         any_executed = any_executed or execute
 
@@ -850,7 +849,7 @@ class Parser_CPP:
             }
         )
         self.json_dict["executionSteps"] = executionSteps
-        self.scope_stack.append([scope_reference, endLine, {}, any_executed])
+        self.scope_stack.append([scope_reference, endLine, {}, any_executed, scope])
 
         step += 1
         
@@ -882,14 +881,12 @@ class Parser_CPP:
                 net_bracket_cnt -= 1
         endLine = line
 
-        scope_reference = f"__DECLAREDAT__{highlight}__ELSE_BLOCK__"
-        scope = self.scope_stack[-1][0]
-        
+        scope_reference = f"__DECLAREDAT__{highlight}__ELSE_BLOCK__"       
         prev_scope = self.scope_stack[-1]
-        print(f"prev_scope[0] = {prev_scope[0]}")
         if not (prev_scope[0].endswith("__IF_BLOCK__") or prev_scope[0].endswith("__ELSEIF_BLOCK__")):
             raise Exception("Error! ELSE BLOCK WITHOUT PRECEDING IF/ELSEIF BLOCK")
         any_executed = prev_scope[3]
+        scope = prev_scope[4]
         executed = not any_executed
 
         executionSteps = self.json_dict["executionSteps"] 
@@ -1387,11 +1384,14 @@ if __name__ == "__main__":
     parser = Parser_CPP(code_file)
     parser.generate_json()
     print()
-    print(f"parser.jsonResponse = \n{parser.jsonResponse}")
-    print()
     scope_stack = json.dumps(parser.scope_stack, indent=4)
     print(f"parser.scope_stack = \n{scope_stack}")
     print()
     scope_registry = json.dumps(parser.scope_registry, indent=4)
     print(f"parser.scope_registry = \n{scope_registry}")
     print()
+    print(f"parser.jsonResponse = \n{parser.jsonResponse}")
+    print()
+    
+    
+    
