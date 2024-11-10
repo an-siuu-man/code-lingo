@@ -1,16 +1,63 @@
 #include <iostream>
 int main() {
-  int leo = 0;
-  int jay = 10;
-  for (int i = 0; i < 10; i = i + 1 ){
-    leo = leo + i;
-    if (leo == 9){
-      int shivansh = 10;
+
+    
+    std::string name = "Alice";
+    int age = 25;
+    double height = 5.8;  
+    bool isStudent = true;
+
+    
+    displayMessage(name, age);
+
+    new_funct(1, 2);
+
+    
+    for (int i = 1; i <= 5; i+=1) {
+        std::cout << "Counting up: " << i << std::endl;
+        if (i == 3){
+            int testing = 1;
+            continue;
+        }
+
+        randomVar += 3;
+    }
+
+
+    
+    int countdown = 3;
+    while (countdown >0) {
+        std::cout << "Countdown: " << countdown << std::endl;
+        --countdown;
+        if (countdown == 1){
+            int parsing = 123;
+            break;
+        }
+        randomVar -= 1;
+        isStudent=  false;}
+    
+    
+    if  (age < 18) 
+    
+    {
+        randomVar -= 2;
+        std::cout << "You are a minor." << std::endl;
+
+
+
     } else {
       jay = jay - i;
     }
-    float ansuman = 99.1;
-  }
-  int sax = -1;
-  return 0;
+
+    
+    randomVar -= 6;
+
+    
+    return 0;
+}
+
+void new_funct( int            arg1    , float         arg2             ){
+    int test_var=0;
+    test_var = 1;
+    return;
 }

@@ -27,21 +27,32 @@ int main() {
     // For loop to count up to 5
     for (int i = 1; i <= 5; i+=1) {
         std::cout << "Counting up: " << i << std::endl;
+        if (i == 3){
+            int testing = 1;
+            continue;
+        }
+
+        randomVar += 3;
     }
 
 
     // While loop to countdown from 3
     int countdown = 3;
-    while (countdown > 0) {
+    while (countdown >0) {
         std::cout << "Countdown: " << countdown << std::endl;
-        countdown-= 1;
-        isStudent=  false;
-    }
+        --countdown;
+        if (countdown == 1){
+            int parsing = 123;
+            break;
+        }
+        randomVar -= 1;
+        isStudent=  false;}
     
     // If-else condition based on age
     if  (age < 18) 
     
     {
+        randomVar -= 2;
         std::cout << "You are a minor." << std::endl;
     } else {
         std::cout << "You are an adult." << std::endl;
