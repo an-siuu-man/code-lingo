@@ -93,6 +93,7 @@ return (
                       width="100%"
                       incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n'): ''}
                       setIncomingJSON={setIncomingJSON}
+                      isDynamic={false}
                       />
               </div>
 

@@ -3,7 +3,7 @@ import Editor from '@monaco-editor/react';
 import PageButton from './PageButton';
 import axios from 'axios';
 
-const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height = "", width = "" }) => {
+const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height = "", width = "", isDynamic}) => {
   const [code, setCode] = useState(incomingCode || ''); // Initialize with incomingCode only once
 
   useEffect(() => {
@@ -183,7 +183,7 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height 
         defaultLanguage="cpp"
         height={height}
         width={width}
-        value={code} // Use the local code state instead of incomingCode
+        value={isDynamic ? incomingCode : code} // Use the local code state instead of incomingCode
         onMount={handleEditorDidMount}
         onChange={!readOnly ? handleEditorChange : undefined} // Disable onChange when readOnly
         options={{

@@ -106,7 +106,7 @@ export default function Training() {
                             width: 'fit-content',
                             borderRadius: '8px', // Rounded corners
                         }}>
-                        <EditorMonaco readOnly={true} height="500px" width='650px' incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
+                        <EditorMonaco readOnly={true} height="500px" width='650px' incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} isDynamic={true} />
                     </div>
 
                     {/* TerminalComp on the right */}
