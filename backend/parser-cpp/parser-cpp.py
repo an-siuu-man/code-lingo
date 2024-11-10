@@ -1148,3 +1148,5 @@ if __name__ == "__main__":
     scope_registry = json.dumps(parser.scope_registry, indent=4)
     print(f"parser.scope_registry = \n{scope_registry}")
     print()
+
+    print()
