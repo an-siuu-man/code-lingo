@@ -1,8 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const Sidebar = () => {
+const Sidebar = (props) => {
   const [topics, setTopics] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,10 +27,10 @@ const Sidebar = () => {
       }`}
     >
       <div
-        className={`p-2 text-${isOpen ? 'right' : 'center'} text-white cursor-pointer`}
+        className={`text-white cursor-pointer`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? 'Hide Topics' : 'Show Topics'}
+        <p className='p-2 text-right'>{isOpen ? 'Hide Topics' : 'Show Topics'}</p>
       </div>
       {isOpen && (
         <ul>

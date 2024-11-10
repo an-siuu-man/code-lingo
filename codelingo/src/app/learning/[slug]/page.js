@@ -1,11 +1,16 @@
 'use client';
 
-import React from 'react';
-import Navbar from '../components/Navbar';
-import Sidebar from './Sidebar';
-import EditorMonaco from '../components/EditorMonaco';
+import React, { use, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import Navbar from '../../components/Navbar';
+import Sidebar from '../../components/Sidebar';
+import EditorMonaco from '../../components/EditorMonaco';
 
 export default function Learning() {
+
+    const params = useParams();
+
     return (
         <div className='relative flex w-full'>
             {/* Sidebar component on the left */}
@@ -18,7 +23,7 @@ export default function Learning() {
                 
                 {/* Placeholder for additional sections or components */}
                 <div>
-                    <p>Welcome to the Learning Page. Here, you'll find different coding concepts and interactive modules to learn from.</p>
+                    <p>Welcome to the Learning Page. Here, you'll find different coding concepts and interactive modules to learn about {params.slug}.</p>
                     <EditorMonaco />
                 </div>
             </div>
