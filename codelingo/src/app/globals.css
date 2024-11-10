@@ -72,6 +72,10 @@ label {
   color: #ce0505;
 }
 
+.learning-sidebar {
+  background: linear-gradient(to left, #1e1e1e, black);
+}
+
 .sub-topic {
   font-family: 'Source Code Pro', monospace;
 }
