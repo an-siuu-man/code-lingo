@@ -17,7 +17,8 @@ const signUp = async (email, password, username) => {
     username: username,
     createdAt: new Date()
   });
-
+  //first logout the user to ensure they login to come back
+  await signOut(auth);
   return user;
   
 } 
