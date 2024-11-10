@@ -60,17 +60,24 @@ export default function Navbar(props) {
         <div className="flex w-full justify-between bg-[#1d1f21] items-center sticky top-0 z-50">
             <div className="flex p-5 items-center cursor-pointer hover:scale-[1.1] duration-[200ms]" onClick={() => { router.push('/') }}>
                 <Image className='rounded-[50%] mr-[15px]' src={logo} width={50} height={50} alt='logo' />
-                <h1 className="text-3xl ">Code</h1><h1 className="text-3xl text-[#FF6B6B]">Lingo</h1>
+                <h1 className="text-3xl ">Code</h1><h1 className="text-3xl text-[#FF6B6B]">{'Lingo</>'}</h1>
             </div>
             <div>
             {user ? (
                 <>
-                    {pathname === '/learning' && (
+                    {pathname.includes('/learning') && (
                         <>
-                            <Link href="/learning" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 ${pathname == '/learning' ? 'text-[#FCA204]' : 'text-[white]'}`}>Learning</Link>
-                            <Link href="/training" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 ${pathname == '/training' ? 'text-[#FCA204]' : 'text-[white]'}`}>Training</Link>
+                            <Link href="/learning" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[#FCA204]`}>Learning</Link>
+                            <Link href="/training" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[white]`}>Training</Link>
                         </>
                     )}
+                    {pathname.includes('/training') && (
+                        <>
+                            <Link href="/learning/Hello World Program" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[white]`}>Learning</Link>
+                            <Link href="/training" className={`text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[#FCA204]`}>Training</Link>
+                        </>
+                    )}
+
                     <button onClick={handleLogout} className="text-2xl mx-[25px] hover:text-[#FF6b6b] transition duration-200 text-[white]">Log Out</button>
                 </>
             ) : (

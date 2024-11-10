@@ -11,7 +11,6 @@ export async function GET(req) {
     `;
     
     const { rows } = await Query(sql);
-    console.log('Database query result:', rows);
 
     // Process the data to group sections under each topic
     const topics = rows.reduce((acc, row) => {
@@ -37,8 +36,10 @@ export async function GET(req) {
 // POST route to retrieve data based on a specific section
 export async function POST(req) {
   try {
+    console.log('Request:', req);
     // Parse the request body to get the section name
     const { section } = await req.json();
+    console.log('Section:', section);
     if (!section) {
       return NextResponse.json({ error: 'Section parameter is required' }, { status: 400 });
     }
@@ -47,7 +48,7 @@ export async function POST(req) {
     const sql = `
       SELECT section, content, code
       FROM cpp_data
-      WHERE section = $1;
+      WHERE section =  '${section}';
     `;
 
     // Execute the query with the section parameter
