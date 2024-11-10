@@ -91,6 +91,9 @@ class Parser_CPP:
             raise Exception("Error. Could not open src_code file.")
 
     def _update_scope_stack(self, line):    # DONE!
+        if len(self.scope_stack) == 0:
+            return
+        
         global_scope_endline = self.scope_stack[0][1]
         curr_scope_endline = self.scope_stack[-1][1]
         
@@ -1015,16 +1018,18 @@ app = Flask(__name__)
 
 @app.route('/parse_string', methods=['POST'])
 def parse_code_string():
+    retJSON = None
     if request.method == 'POST':
         code_string = request.json.get('code_string')
+        print(code_string)
         if not code_string:
             return jsonify({"error": "No code string provided"}), 400
-        with open(os.path.join(os.path.dirname(__file__), 'temp_code.cpp'), 'w') as temp_code_file:
+        with open(os.path.join(os.path.dirname(__file__), 'temp_code.cpp'), 'w+') as temp_code_file:
             temp_code_file.write(code_string)
-        parser = Parser_CPP('temp_code.cpp')
-        parser.generate_json()
-        os.remove('temp_code.cpp')
-        return parser.jsonResponse
+            parser = Parser_CPP(temp_code_file)
+            parser.generate_json()
+            retJSON = parser.jsonResponse
+        return retJSON
 
 if __name__ == "__main__":
     app.run(port=5000)
