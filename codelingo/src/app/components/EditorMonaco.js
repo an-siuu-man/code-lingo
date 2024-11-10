@@ -201,7 +201,7 @@
 // components/MonacoEditor.js
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import PageButton from './PageButton';
 import axios from 'axios';
@@ -210,22 +210,32 @@ import axios from 'axios';
 const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height="", width="" }) => {
   const [code, setCode] = useState(incomingCode || ''); // State to store editor content
 
+
+  useEffect(() => {
+    if (!code && incomingCode) {
+      setCode(incomingCode);
+    }
+  }, [incomingCode]); // Empty useEffect to prevent infinite loop
+
+
   function handleEditorDidMount(editor, monaco) {
     monaco.editor.defineTheme('monokai-one-darker', {
       base: 'vs-dark',
       inherit: true,
       rules: [
-        { token: 'comment', foreground: '75715e', fontStyle: 'italic' },
-        { token: 'keyword', foreground: 'b5414b' },
-        { token: 'number', foreground: 'ae81ff' },
-        { token: 'string', foreground: 'e6db74' },
-        { token: 'variable', foreground: 'a6e22e' },
-        { token: 'function', foreground: '66d9ef' },
-        { token: 'type', foreground: 'a6e22e' },
-        { token: 'constant', foreground: 'fd971f' },
-        { token: 'tag', foreground: 'b5414b' },
-        { token: 'attribute.name', foreground: '66d9ef' },
-        { token: 'delimiter', foreground: 'f8f8f2' },
+        { token: 'comment', foreground: '75715e', fontStyle: 'italic' },     // Dark olive for comments
+        { token: 'keyword', foreground: 'ad1f52' },                          // Monokai pink for keywords
+        { token: 'number', foreground: 'ae81ff' },                           // Light purple for numbers
+        { token: 'string', foreground: 'e6db74' },                           // Yellow for strings
+        { token: 'variable', foreground: 'a6e22e' },                         // Green for variables
+        { token: 'function', foreground: '66d9ef' },                         // Light blue for functions
+        { token: 'type', foreground: 'a6e22e' },                             // Green for types
+        { token: 'constant', foreground: 'fd971f' },                         // Orange for constants
+        { token: 'tag', foreground: 'f92672' },                              // Monokai pink for tags
+        { token: 'attribute.name', foreground: 'a6e22e' },                   // Green for attribute names
+        { token: 'delimiter', foreground: 'f8f8f2' },                        // Light gray for delimiters
+        { token: 'class-name', foreground: '66d9ef' },                       // Light blue for class names
+        { token: 'type.identifier', foreground: 'fd971f' }    
       ],
       // colors: {
       //   "activityBar.background": "#2f373a",
@@ -311,10 +321,10 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height=
 
       "button.background": "#008080", // Muted cyan for buttons to match the hacker aesthetic
 
-      "editor.background": "#101010", // Very dark background to enhance neon colors
+      "editor.background": "#101d21", // Very dark background to enhance neon colors
       "editor.foreground": "#00ff99", // Neon green foreground
       "editorCursor.foreground": "#00ff00", // Bright green cursor for classic hacker look
-      "editor.lineHighlightBackground": "#1a1a1a", // Dark highlight background
+      "editor.lineHighlightBackground": "#2e3030", // Dark highlight background
       "editor.selectionBackground": "#003300", // Dark green selection for Matrix effect
       "editor.findMatchBackground": "#2f4f4f", // Teal highlight for search matches
       "editor.findMatchHighlightBackground": "#4c7f7f", // Light teal for match highlight
@@ -408,7 +418,7 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height=
       />
       {!readOnly && (
         <div className='py-4 flex justify-end w-full'>
-          <PageButton label="Submit" handleClick={handleSubmit} />
+          <PageButton label="Compile" handleClick={handleSubmit} />
         </div>
       )}
     </div>

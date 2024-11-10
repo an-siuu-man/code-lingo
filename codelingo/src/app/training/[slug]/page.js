@@ -77,7 +77,7 @@ export default function Training() {
                     <h1 className='training-header text-5xl font-[poppins] mr-4'>Training</h1><h1 className='training-header text-5xl font-[poppins] text-[#ff6b6b]'>Page</h1>
                     </div>
                     <div className=''>
-                        <h1 className='text-center text-2xl'>Challenge Level</h1>
+                        <h1 className='text-center text-2xl font-[poppins] font-[700] '>Challenge Level</h1>
                         <ul className='flex flex-row justify-between '>
                             <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 1), setSelectedLevel(1)}} className={`${selectedLevel  === 1 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 1</li>
                             <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 2), setSelectedLevel(2)}} className={`${selectedLevel  === 2 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 2</li>
@@ -103,7 +103,7 @@ export default function Training() {
                     <div
                         className="flex-grow p-4 h-[fit-content] bg-[#2e2e2e] rounded-lg shadow-lg"
                         style={{
-                            width: '600px',
+                            width: '50%',
                             borderRadius: '8px', // Rounded corners
                         }}>
                         <EditorMonaco readOnly={true} height="500px" incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
@@ -114,7 +114,7 @@ export default function Training() {
                         className="flex-grow p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
                         style={{
                             height: 'fit-content',
-                            width: '750px',
+                            width: '50%',
                             borderRadius: '8px', // Rounded corners
                             overflow: '', // Prevents overflow for rounded edges
                         }}>

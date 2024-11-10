@@ -70,7 +70,7 @@ const VisualizationPage = ({ saxx }) => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Execution Visualization</h2>
+      <h1 className='text-center text-2xl font-[poppins] font-[700] pb-4'>Execution Visualization</h1>
       <div className="visualization-container">
         {renderVariables()}
       </div>

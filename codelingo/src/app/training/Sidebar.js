@@ -45,7 +45,7 @@ const Sidebar = () => {
       </div>
       {isOpen && (
         <ul>
-          <h1 className="py-4 ml-8 text-3xl font-[700] text-left">Learning Topics</h1>
+          <h1 className="py-4 ml-8 text-3xl font-[700] text-left">Training Topics</h1>
 
           {topics.map((topicObj, index) => (
             <li key={index}>
