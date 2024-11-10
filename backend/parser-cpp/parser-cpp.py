@@ -9,6 +9,7 @@ IDEAS: Implement pointers, references, arrays
 
 """
 ISSUES: '\n'-type whitespaces are not contemplated properly in dtype, keyword, var_name statements
+        ELSE-IF BLOCKS NOT IMPLEMENTED!!!
 BUGS:   int i = 0, j = 5; NOT CONTEMPLATED!!!
         VARIABLE INITIALIZATION WITH OTHER VARIABLES!!!
 """
@@ -246,7 +247,7 @@ class Parser_CPP:
 
         return i, line, step
 
-    def _parse_reference(self, argv: list):   # IN PROGRESS!
+    def _parse_reference(self, argv: list):   # DONE!
         LOOP_COND, ref, var_name, i, line, step, backtrack_i, backtrack_line = argv
         
         stmt_start = i
@@ -466,9 +467,12 @@ class Parser_CPP:
         else:   # self.code[i] == ";"
             value = "__UNINITIALIZED__"   # Uninitialized variable case
         
-        reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name + "__"
+        
 
+
+        reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name + "__"     
         self.scope_stack[-1][2][reference] =  [data_type, name, value]
+
         if value != "__UNINITIALIZED__":
             # Temporary fix, implement scalable solution
             if value == "true":
@@ -795,7 +799,6 @@ class Parser_CPP:
             
             if raw_result:
                 i, line, step = self._parse_section(in_for_i, in_for_line, step, end_for_i, end_for_line)
-                print(f"i = {i} | end_for_i = {end_for_i}")
                 if i > end_for_i:
                     return end_for_i, end_for_line, step
                 self._parse_section(stmts_update_i, stmts_update_line, step, stmts_end_i, stmts_end_line + 1)
@@ -1108,7 +1111,7 @@ class Parser_CPP:
 
         return end_loop_i, end_loop_line, step
 
-    def _parse_continue(self, argv: list):
+    def _parse_continue(self, argv: list):  # DONE!
         LOOP_COND, i, line, step, highlight = argv[:5]
 
         loop_scope = None
@@ -1138,7 +1141,7 @@ class Parser_CPP:
 
         return end_loop_i - 1, end_loop_line, step
 
-    def _parse_return(self, argv: list):
+    def _parse_return(self, argv: list):    # IN PROGRESS!
         LOOP_COND, i, line, step, highlight = argv[:5]
         return i, line, step
 
@@ -1225,6 +1228,4 @@ if __name__ == "__main__":
     print()
     scope_registry = json.dumps(parser.scope_registry, indent=4)
     print(f"parser.scope_registry = \n{scope_registry}")
-    print()
-
     print()
