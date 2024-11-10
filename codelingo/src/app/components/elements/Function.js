@@ -1,18 +1,16 @@
-// Function.js
+// FunctionNode.js
 "use client";
 import React from 'react';
+import { Handle } from 'reactflow';
 
-const Function = ({ name, returnType, args, startLine, endLine }) => {
-    return (
-        <div className="border border-gray-300 p-4 m-2 rounded-lg bg-gray-900 text-white">
-            <h2 className="text-lg font-bold">Function Declaration</h2>
-            <p>Name: {name}</p>
-            <p>Return Type: {returnType}</p>
-            <p>Arguments: {JSON.stringify(args)}</p>
-            <p>Start Line: {startLine}</p>
-            <p>End Line: {endLine}</p>
-        </div>
-    );
-};
+const FunctionNode = ({ data }) => (
+    <div className="border-2 border-green-500 p-3 rounded bg-green-100 text-green-900 shadow-md">
+        <h2 className="text-lg font-semibold">Function Declaration</h2>
+        <p>Name: {data.name}</p>
+        <p>Return Type: {data.returnType}</p>
+        <p>Arguments: {JSON.stringify(data.args)}</p>
+        <Handle type="source" position="bottom" className="bg-green-500" />
+    </div>
+);
 
-export default Function;
+export default FunctionNode;

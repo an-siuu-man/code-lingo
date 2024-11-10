@@ -1,16 +1,16 @@
-// VariableDeclaration.js
+// VariableDeclarationNode.js
 "use client";
 import React from 'react';
+import { Handle } from 'reactflow';
 
-const VariableDeclaration = ({ type, name, value }) => {
-    return (
-        <div className="border border-gray-300 p-4 m-2 rounded-lg bg-gray-800 text-white">
-            <h2 className="text-lg font-bold">Variable Declaration</h2>
-            <p>Type: {type}</p>
-            <p>Name: {name}</p>
-            <p>Value: {value}</p>
-        </div>
-    );
-};
+const VariableDeclarationNode = ({ data }) => (
+    <div className="border-2 border-yellow-500 p-3 rounded bg-yellow-100 text-yellow-900 shadow-md">
+        <h2 className="text-lg font-semibold">Variable Declaration</h2>
+        <p>Type: {data.type}</p>
+        <p>Name: {data.name}</p>
+        <p>Value: {data.value}</p>
+        <Handle type="source" position="bottom" className="bg-yellow-500" />
+    </div>
+);
 
-export default VariableDeclaration;
+export default VariableDeclarationNode;
