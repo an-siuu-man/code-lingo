@@ -12,7 +12,7 @@ const VisualizationPage = ({ saxx }) => {
     }
 
     const processStep = (step) => {
-      const { operation, reference, name, value, new_value, condition, executed, scope } = step;
+      const { operation, reference, name, value, new_value, condition, executed, scope, result } = step;
       setVariables((prevVars) => {
         const updatedVars = { ...prevVars };
 
@@ -28,9 +28,34 @@ const VisualizationPage = ({ saxx }) => {
             label: `IF (${condition}: ${executed === 'True' ? 'Executed' : 'Not Executed'})`,
             scope,
           };
+        } else if (operation === 'ELSEIF_BLOCK') {
+          updatedVars[reference] = {
+            label: `ELSE IF (${condition}: ${executed === 'True' ? 'Executed' : 'Not Executed'})`,
+            scope,
+          };
         } else if (operation === 'ELSE_BLOCK') {
           updatedVars[reference] = {
-            label: `ELSE`,
+            label: `ELSE: ${executed === 'True' ? 'Executed' : 'Not Executed'}`,
+            scope,
+          };
+        } else if (operation === 'FOR_LOOP') {
+          updatedVars[reference] = {
+            label: `FOR (${condition}: ${result ? 'Continued' : 'Terminated'})`,
+            scope,
+          };
+        } else if (operation === 'WHILE_LOOP') {
+          updatedVars[reference] = {
+            label: `WHILE (${condition}: ${result ? 'Continued' : 'Terminated'})`,
+            scope,
+          };
+        } else if (operation === 'BREAK') {
+          updatedVars[reference] = {
+            label: `BREAK: Loop terminated`,
+            scope,
+          };
+        } else if (operation === 'CONTINUE') {
+          updatedVars[reference] = {
+            label: `CONTINUE: Loop iteration skipped`,
             scope,
           };
         }

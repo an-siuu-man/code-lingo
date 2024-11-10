@@ -106,7 +106,7 @@ return (
                       overflowY: 'auto', // Allow scrolling if content overflows
                   }}
               >
-                  <VisualizationPageStyled data={incomingJSON ? incomingJSON : {}}/>
+                  <VisualizationPageStyled data={incomingJSON}/>
               </div>
           </div>
       </div>
