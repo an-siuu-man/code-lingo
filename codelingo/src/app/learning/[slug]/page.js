@@ -51,7 +51,7 @@ export default function Learning() {
                 {/* Placeholder for additional sections or components */}
                 <div>
                     <p>Welcome to the Learning Page. Here, you'll learn about {incomingJSON.content}</p>
-                    <EditorMonaco incomingCode = {incomingJSON.code} />
+                  <EditorMonaco incomingCode = {incomingJSON.code} readOnly={false} height='500px'/>
                 </div>
             </div>
         </div>
