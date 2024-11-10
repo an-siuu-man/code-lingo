@@ -12,7 +12,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     const fetchTopics = async () => {
-      const res = await axios.get('/api/learningroute/');
+      const res = await axios.get('/api/training/');
       const data = await res.data;
       console.log("DATA: ", res.data);
       const topicsArray = Object.entries(data).map(([key, subtopics]) => ({
@@ -29,8 +29,8 @@ const Sidebar = () => {
   console.log(topics);
   return (
     <nav
-      className={`z-[99] learning-sidebar fixed top-0 left-0 h-full overflow-scroll transition-all duration-300 ${
-        isOpen ? 'w-[30vw]' : 'w-[5vw]'
+      className={`z-[99] learning-sidebar fixed top-0 left-0 h-full overflow-scroll bg-[#333] transition-all duration-300 ${
+        isOpen ? 'w-[32vw]' : 'w-[5vw]'
       }`}
     >
       <div
@@ -63,7 +63,7 @@ const Sidebar = () => {
                         <td>
                            <Link 
                           className={` ${pathname.includes(`${subheading.section.replace(/\s/g, '%20')}`) ? 'text-[#FCA204]' : ''} text-left sub-topic ml-2 text-[15px]`} 
-                          href={`/learning/${subheading.section.replace(/\s/g, '%20')}`}>
+                          href={`/training/${subheading.section.replace(/\s/g, '%20')}`}>
                             {subheading.section}
                           </Link>
                         </td>

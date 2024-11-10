@@ -73,19 +73,23 @@ label {
 }
 
 .learning-sidebar {
-  background: linear-gradient(to left, #1e1e1e, black);
+  /* background: linear-gradient(to left, #1e1e1e, black); */
+  background: rgba(29, 31, 33, 0.8);
+  backdrop-filter: blur(10px);
 }
 
 .sub-topic {
   font-family: 'Source Code Pro', monospace;
+
 }
-
-
 /* 
 input:valid {
   border-bottom-color: #4caf50;
 } */
 
+.training-header {
+  font-family: 'Source Code Pro', monospace;
+}
 
 @keyframes fadeInLeft {
   0% {

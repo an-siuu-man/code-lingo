@@ -403,6 +403,7 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height=
         onChange={!readOnly ? handleEditorChange : undefined} // Disable onChange when readOnly
         options={{
           readOnly: readOnly, // Set editor as read-only if true
+          fontFamily: 'Source Code Pro, monospace'
         }}
       />
       {!readOnly && (
