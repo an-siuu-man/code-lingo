@@ -2,7 +2,7 @@ const { Query } = require('../db');
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {
-  console.log('Request:', req);
+  // console.log('Request:', req);
   try {
     // Query to fetch topics and sections
     const sql = `
@@ -11,7 +11,6 @@ export async function GET(req) {
     `;
     
     const { rows } = await Query(sql);
-    console.log('Database query result:', rows);
 
     // Process the data to group sections under each topic
     const topics = rows.reduce((acc, row) => {
@@ -38,6 +37,7 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     // Parse the request body to get the section name
+    console.log('Request:', req);
     const { section, level } = await req.json();
     if (!section || !level) {
       return NextResponse.json({ error: 'Section and level parameter is required' }, { status: 400 });
@@ -45,9 +45,9 @@ export async function POST(req) {
 
     // SQL query to fetch content and code based on the section
     const sql = `
-      SELECT section, question, code, answer, points, level
-      FROM cpp_data
-      WHERE section = ${section} AND level = ${level};
+      SELECT section, question, code, answer, points
+      FROM cpp_training
+      WHERE section = '${section}' AND level = ${level};
     `;
 
     // Execute the query with the section parameter
