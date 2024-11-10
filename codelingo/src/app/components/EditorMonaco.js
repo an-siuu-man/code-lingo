@@ -6,6 +6,7 @@ import Editor from '@monaco-editor/react';
 import PageButton from './PageButton';
 import axios from 'axios';
 
+
 const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height="", width="" }) => {
   const [code, setCode] = useState(incomingCode || ''); // State to store editor content
 
@@ -159,6 +160,7 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height=
 
   async function handleSubmit() {
     try {
+      console.log('Submitting code:', code);
       const response = await axios.post('/api/generate', { code }, {
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +198,7 @@ const EditorMonaco = ({ setIncomingJSON, incomingCode, readOnly = false, height=
         height={height}
         width={width}
         defaultValue={`#include <iostream>\nint main() {\n  // Print "Hello World" here\n  return 0;\n}`}
-        value={code}
+        value={incomingCode}
         onMount={handleEditorDidMount}
         onChange={!readOnly ? handleEditorChange : undefined} // Disable onChange when readOnly
         options={{
