@@ -1,15 +1,11 @@
+// pages/index.js
 "use client";
+import NestedFlow from '../components/Visu';
 
-import React from 'react';
-    import Visu from '../components/Visu';
-
-const Page = () => {
-    return (
-        <div>
-            <h1>CodeLingo Visualizer</h1>
-            <Visu />
-        </div>
-    );
+export default function Home() {
+  return (
+    <div>
+      <NestedFlow />
+    </div>
+  );
 }
-
-export default Page;

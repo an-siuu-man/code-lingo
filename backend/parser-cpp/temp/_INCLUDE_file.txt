@@ -54,9 +54,10 @@ int main() {
     {
         randomVar -= 2;
         std::cout << "You are a minor." << std::endl;
+
+
     } else {
-        std::cout << "You are an adult." << std::endl;
-        randomVar += 12;
+      jay = jay - i;
     }
     
     randomVar -= 6;
@@ -70,4 +71,5 @@ void new_funct( int            arg1    , float         arg2             ){
     test_var = 1;
     return;
 }
+
 
