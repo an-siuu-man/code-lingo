@@ -7,8 +7,7 @@ export async function GET(req) {
     // Query to fetch topics and sections
     const sql = `
       SELECT topic, section
-      FROM cpp_data
-      ORDER BY topic, section;
+      FROM cpp_data;
     `;
     
     const { rows } = await Query(sql);
