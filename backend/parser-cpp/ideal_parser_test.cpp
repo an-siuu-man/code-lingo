@@ -25,7 +25,7 @@ int main() {
     new_funct(1, 2);
 
     // For loop to count up to 5
-    for (int i = 1; i <= 5; ++i) {
+    for (int i = 1; i <= 5; i+=1) {
         std::cout << "Counting up: " << i << std::endl;
     }
 
@@ -34,7 +34,7 @@ int main() {
     int countdown = 3;
     while (countdown > 0) {
         std::cout << "Countdown: " << countdown << std::endl;
-        --countdown;
+        countdown-= 1;
         isStudent=  false;
     }
     
