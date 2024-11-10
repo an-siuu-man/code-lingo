@@ -76,8 +76,7 @@ return (
                     </div>
           {/* Container for Editor and Visualization side-by-side */}
           <div
-              className="flex space-x-4 p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
-              style={{ margin: '20px', borderRadius: '8px' }}
+              className="flex space-x-4 my-4 mr-[5vw] p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
           >
               {/* EditorMonaco on the left */}
               <div

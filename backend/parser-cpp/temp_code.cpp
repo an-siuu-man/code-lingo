@@ -1,6 +1,13 @@
 #include <iostream>
 int main() {
-    char grade = 'A';
-    std::cout << "Grade: " << grade << std::endl;
-    return 0;
+  int k = 15;
+
+  while (k < 15) {
+    k = k + 1;
+  
+    if (k > 13) {
+      k = 16;
+    }
+  }
+
 }

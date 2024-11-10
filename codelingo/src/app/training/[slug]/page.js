@@ -96,17 +96,17 @@ export default function Training() {
 
                 {/* Flex container for Editor and Terminal side by side */}
                 <div
-                    className="mt-[2vw] flex h-[500px] w-[95%] space-x-4"
+                    className="mt-[2vh] flex h-[500px] w-[90%] space-x-4"
                     style={{ fontFamily: 'source code pro' }}
 >
                     {/* EditorMonaco on the left */}
                     <div
                         className="flex-grow p-4 h-[fit-content] bg-[#2e2e2e] rounded-lg shadow-lg"
                         style={{
-                            width: '50%',
+                            width: 'fit-content',
                             borderRadius: '8px', // Rounded corners
                         }}>
-                        <EditorMonaco readOnly={true} height="500px" incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
+                        <EditorMonaco readOnly={true} height="500px" width='650px' incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
                     </div>
 
                     {/* TerminalComp on the right */}
@@ -114,7 +114,7 @@ export default function Training() {
                         className="flex-grow p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
                         style={{
                             height: 'fit-content',
-                            width: '50%',
+                            width: 'fit-content',
                             borderRadius: '8px', // Rounded corners
                             overflow: '', // Prevents overflow for rounded edges
                         }}>
