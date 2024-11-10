@@ -29,7 +29,7 @@ int main() {
         std::cout << "Counting up: " << i << std::endl;
         if (i == 3){
             int testing = 1;
-            break;
+            continue;
         }
 
         randomVar += 3;
@@ -41,6 +41,11 @@ int main() {
     while (countdown >0) {
         std::cout << "Countdown: " << countdown << std::endl;
         --countdown;
+        if (countdown == 1){
+            int parsing = 123;
+            break;
+        }
+        randomVar -= 1;
         isStudent=  false;}
     
     

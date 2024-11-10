@@ -691,7 +691,6 @@ class Parser_CPP:
         else:
             return i, endLine, step
         
-
     def _parse_else(self, argv: list):  # DONE!
         LOOP_COND, i, line, step, highlight = argv[:5]
 
@@ -796,6 +795,7 @@ class Parser_CPP:
             
             if raw_result:
                 i, line, step = self._parse_section(in_for_i, in_for_line, step, end_for_i, end_for_line)
+                print(f"i = {i} | end_for_i = {end_for_i}")
                 if i > end_for_i:
                     return end_for_i, end_for_line, step
                 self._parse_section(stmts_update_i, stmts_update_line, step, stmts_end_i, stmts_end_line + 1)
@@ -1046,7 +1046,7 @@ class Parser_CPP:
         else:
             return i, endLine, step
 
-    def _parse_dowhile(self, argv: list):
+    def _parse_dowhile(self, argv: list):   # IN PROGRESS!
         LOOP_COND, i, line, step, highlight = argv[:5]
 
         net_bracket_cnt = 0
@@ -1078,7 +1078,7 @@ class Parser_CPP:
 
         return i, line, step
 
-    def _parse_break(self, argv: list):
+    def _parse_break(self, argv: list): # DONE!
         LOOP_COND, i, line, step, highlight = argv[:5]
 
         loop_scope = None
@@ -1106,11 +1106,37 @@ class Parser_CPP:
         )
         self.json_dict["executionSteps"] = executionSteps
 
-        return end_loop_i + 1, end_loop_line, step
+        return end_loop_i, end_loop_line, step
 
     def _parse_continue(self, argv: list):
         LOOP_COND, i, line, step, highlight = argv[:5]
-        return i, line, step
+
+        loop_scope = None
+        for scope in self.scope_stack[::-1]:
+            if scope[0].endswith("__FOR_LOOP__") or scope[0].endswith("__WHILE_LOOP__"):
+                loop_scope = scope
+                break
+        if loop_scope == None:
+            raise Exception("Error! CONTINUE statement outside of LOOP block.")
+        
+        control_params = loop_scope[4]
+        start_loop_i, start_loop_line, end_loop_i, end_loop_line = control_params
+        
+        reference = f"__DECLAREDAT__{highlight}__CONTINUE__"
+        scope = self.scope_stack[-1][0]
+        executionSteps = self.json_dict["executionSteps"] 
+        executionSteps.append(
+            {
+                "step"      : step,
+                "highlight" : highlight,
+                "operation" : "CONTINUE",
+                "reference" : reference,
+                "scope"     : scope
+            }
+        )
+        self.json_dict["executionSteps"] = executionSteps
+
+        return end_loop_i - 1, end_loop_line, step
 
     def _parse_return(self, argv: list):
         LOOP_COND, i, line, step, highlight = argv[:5]
