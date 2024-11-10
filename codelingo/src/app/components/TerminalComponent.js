@@ -31,7 +31,7 @@ export default function TerminalComp() {
         xterm.focus();
 
         // Write the welcome message and initial prompt
-        xterm.writeln("Welcome to CodeLingo Terminal");
+        xterm.writeln("Welcome to the CodeLingo Terminal!");
         xterm.write("$ ");
 
         // Local variables to track input, cursor position, and command history
@@ -146,5 +146,5 @@ export default function TerminalComp() {
         };
     }, []); // Empty dependency array ensures useEffect runs only once
 
-    return <div ref={terminalRef} style={{ width: "700px", height: "500px" }} />;
+    return <div ref={terminalRef} style={{ width: "500px", height: "500px" }} />;
 }

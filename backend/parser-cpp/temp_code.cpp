@@ -1,21 +1,22 @@
-#include <iostream>#include <iostream>
+#include <iostream>
 int main() {
-  int leo = 0;
-  int jay = 10;
-  for (int i = 0; i < 10; i = i + 1 ){
-    leo = leo + i;
-    if (i == 9){
-      int shivansh = 10;
-    } else {
-      jay = jay - i;
-    }
-    float ansuman = 99.1;
-  }
-  int sax = -1;
-  return 0;
-}
+    int k = 19;
+    
+    int g = 20;
 
-int main() {
-  // Print "Hello World" here
-  return 0;
+    if (k > g) {
+
+        k = k + 1;
+
+    } else {
+        g = g - 1;
+        int h = 0;
+        h = 5;
+        h = h - 1;
+    }
+    int h = 0;
+
+    h = h + 1;
+
+    return 0;
 }

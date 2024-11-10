@@ -5,7 +5,7 @@ import { SparklesCore } from "../UI/sparkles";
 export function SparklesPreview() {
 return (
     <div
-        className="h-[25rem] w-full bg-rgb(29, 31, 33) flex flex-col items-center justify-center overflow-hidden rounded-md">
+        className="h-[20rem] w-full bg-rgb(29, 31, 33) flex flex-col items-center justify-center overflow-hidden rounded-md">
         <h1
             className="md:text-7xl text-3xl lg:text-8xl text-center text-white relative z-20">
             Code<span className="text-[#FF6B6B]">{'Lingo</>'}</span>
@@ -13,7 +13,7 @@ return (
         <h2 className="text-2xl text-center text-white relative z-20 m-3 fade-in-left">
             An Interactive Learning Platform for Coding
         </h2>
-        <div className="w-[40rem] h-40 relative">
+        <div className="w-[40rem] h-10 relative">
             {/* Gradients */}
             <div
                 className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
@@ -35,7 +35,7 @@ return (
 
             {/* Radial Gradient to prevent sharp edges */}
             <div
-                className="absolute inset-0 w-full h-full bg-rgb(29, 31, 33) [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+                className="absolute inset-0 w-full h-[50%] bg-rgb(29, 31, 33) [mask-image:radial-gradient(350px_200px_at_top,transparent_40%,white)]"></div>
         </div>
     </div>
 );

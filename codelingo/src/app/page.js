@@ -39,7 +39,7 @@ export default function Home() {
       <Navbar isHighlighted='home' />
       <div className="h-[100vh] mt-20">
         <SparklesPreview />
-        <div className="flex justify-center">
+        <div className="buttons-container flex justify-center">
           <PageButton label={isLoggedIn ? 'Continue Learning' : 'Get Started'} route={isLoggedIn ? 'learning/Hello World Program' : 'signup'} />
           <PageButton label='Learn More' handleClick={handleAboutUs} />
         </div>
