@@ -1,3 +1,5 @@
+'use server';
+
 // Import necessary packages
 const { Pool } = require('pg');
 require('dotenv').config();
@@ -12,10 +14,8 @@ const pool = new Pool({
 });
 
 // Function to query the database
-const query = (text, params) => {
-  return pool.query(text, params);
-};
+function Query(script) {
+  return pool.query(script);
+}
 
-module.exports = {
-  query,
-};
+module.exports = { pool, Query };
