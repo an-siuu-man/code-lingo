@@ -27,6 +27,9 @@ int main() {
     
     for (int i = 1; i <= 5; i+=1) {
         std::cout << "Counting up: " << i << std::endl;
+        if (1 == 0){
+            int testing = 1;
+        }
     }
 
 
@@ -35,13 +38,13 @@ int main() {
     while (countdown >0) {
         std::cout << "Countdown: " << countdown << std::endl;
         --countdown;
-        isStudent=  false;
-    }
+        isStudent=  false;}
     
     
     if  (age < 18) 
     
     {
+        randomVar -= 2;
         std::cout << "You are a minor." << std::endl;
     } else {
         std::cout << "You are an adult." << std::endl;
@@ -58,5 +61,5 @@ void new_funct( int            arg1    , float         arg2             ){
     int test_var=0;
     test_var = 1;
     return;
-
 }
+

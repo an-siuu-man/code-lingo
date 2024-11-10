@@ -57,7 +57,7 @@ next_chars = {
 
 class Parser_CPP:
     def __init__(self, code_file):
-        self.code = self._read_src(code_file)
+        self.code = self._read_src(code_file) + "\n\n"
         self.code_lines = self._read_src(code_file, byLine = True)
 
         self.json_dict = {"code": self.code, "executionSteps": []}
@@ -102,7 +102,7 @@ class Parser_CPP:
         if curr_scope_endline < 0:
             return
 
-        if line >= curr_scope_endline:
+        if line > curr_scope_endline:
             old_scope = self.scope_stack.pop()
             self.scope_registry.append(old_scope)
         if line == global_scope_endline and len(self.scope_stack) != 0:
@@ -121,6 +121,8 @@ class Parser_CPP:
         while LOOP_COND(i):
             if self.code[i] == "\n":
                 line += 1
+
+            self._update_scope_stack(line)
             
             for dtype in cpp_data_types:
                 if self.code[i:i+len(dtype)] == dtype and self.code[i+len(dtype)] in next_chars["line_wspc"]:
@@ -167,6 +169,8 @@ class Parser_CPP:
             if self.code[i] == "\n":
                 line += 1
             
+            self._update_scope_stack(line)
+
             if line >= end_line:
                 break
             
@@ -658,7 +662,8 @@ class Parser_CPP:
                 eval_stmt_list = [ref if scope[2][ref][1] == x else x for x in eval_stmt_list]
         ref_eval_stmt = " ".join(eval_stmt_list)
 
-        result = str(eval(ref_eval_stmt))
+        raw_result = eval(ref_eval_stmt)
+        result = str(raw_result)
 
         scope_reference = f"__DECLAREDAT__{highlight}__IF_BLOCK__"
         scope = self.scope_stack[-1][0]
@@ -670,18 +675,22 @@ class Parser_CPP:
                 "operation" : "IF_BLOCK",
                 "reference" : scope_reference,
                 "condition" : condition,
-                "result"    : result,
+                "executed"    : result,
                 "startLine" : startLine,
                 "endLine"   : endLine,
                 "scope"     : scope
             }
         )
         self.json_dict["executionSteps"] = executionSteps
-        self.scope_stack.append([scope_reference, endLine, {}, result])
+        self.scope_stack.append([scope_reference, endLine, {}, raw_result])
 
         step += 1
-
-        return backtrack_i, startLine, step
+        
+        if raw_result:
+            return backtrack_i, startLine, step
+        else:
+            return i, endLine, step
+        
 
     def _parse_else(self, argv: list):  # DONE!
         LOOP_COND, i, line, step, highlight = argv[:5]
@@ -708,12 +717,19 @@ class Parser_CPP:
 
         scope_reference = f"__DECLAREDAT__{highlight}__ELSE_BLOCK__"
         scope = self.scope_stack[-1][0]
+        
+        prev_scope = self.scope_stack[-1]
+        if not prev_scope[0].endswith("__IF_BLOCK__"):
+            raise Exception("Error! ELSE BLOCK WITHOUT PRECEDING")
+        executed = not prev_scope[3]
+
         executionSteps = self.json_dict["executionSteps"] 
         executionSteps.append(
             {
                 "step"      : step,
                 "highlight" : highlight,
                 "operation" : "ELSE_BLOCK",
+                "executed"  : str(executed),
                 "reference" : scope_reference,
                 "startLine" : startLine,
                 "endLine"   : endLine,
@@ -725,7 +741,10 @@ class Parser_CPP:
 
         step += 1
 
-        return backtrack_i, startLine, step
+        if executed:
+            return backtrack_i, startLine, step
+        else:
+            return i, endLine, step
 
     def _parse_switch(self, argv: list):
         LOOP_COND, i, line, step, highlight = argv[:5]
@@ -914,7 +933,7 @@ class Parser_CPP:
             raw_result = eval(ref_eval_stmt)
 
             if raw_result:
-                i, line, step = self._parse_section(in_while_i, in_while_line, step, end_while_i, end_while_line)
+                i, line, step = self._parse_section(in_while_i, in_while_line, step, end_while_i, end_while_line + 1)
                 return start_while_i - 1, start_while_line, step
             else:
                 return end_while_i, end_while_line, step
