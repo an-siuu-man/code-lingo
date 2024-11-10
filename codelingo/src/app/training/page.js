@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Navbar from '../components/Navbar';
-import Sidebar from '../learning/Sidebar';
+import Sidebar from '@/app/components/Sidebar';
 import EditorMonaco from '../components/EditorMonaco';
 
 export default function Training() {

@@ -6,8 +6,8 @@ import Editor from '@monaco-editor/react';
 import PageButton from './PageButton';
 import axios from 'axios';
 
-const EditorMonaco = ({ setIncomingJSON }) => {
-  const [code, setCode] = useState(''); // State to store editor content
+const EditorMonaco = ({ setIncomingJSON, incomingCode }) => {
+  const [code, setCode] = useState(incomingCode || ''); // State to store editor content
 
   function handleEditorDidMount(editor, monaco) {
     monaco.editor.defineTheme('monokai-one-darker', {
@@ -136,7 +136,9 @@ const EditorMonaco = ({ setIncomingJSON }) => {
         onMount={handleEditorDidMount}
         onChange={handleEditorChange} // Directly use `handleEditorChange`
       />
-      <PageButton label="Submit" handleClick={handleSubmit} />
+      <div className='py-4 flex justify-end w-full'>
+        <PageButton label="Submit" handleClick={handleSubmit} />
+      </div>
     </div>
   );
 };

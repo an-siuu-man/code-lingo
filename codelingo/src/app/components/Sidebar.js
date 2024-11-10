@@ -19,6 +19,7 @@ const Sidebar = (props) => {
       }));
 
       setTopics(topicsArray);
+      console.log("TOPICS: ", topicsArray);
     };
     fetchTopics();
 
@@ -56,8 +57,8 @@ const Sidebar = (props) => {
                           </p>
                         </td>
                         <td>
-                          <Link className="text-left sub-topic ml-2 text-[15px]" href={`/learning/${subheading}`}>
-                            {subheading}
+                          <Link className="text-left sub-topic ml-2 text-[15px]" href={`/learning/${subheading.section}`}>
+                            {subheading.section}
                           </Link>
                         </td>
                       </tr>

@@ -22,7 +22,7 @@ export default function Home() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // Redirect to the learning page if the user is logged in
-        router.push('/learning');
+        router.push('/learning/Hello World Program');
       }
     });
 
