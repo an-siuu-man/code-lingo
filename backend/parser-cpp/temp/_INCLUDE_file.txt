@@ -1,58 +1,16 @@
-void new_funct(int, float);
-
-int randomVar = 1633;
-
-void displayMessage(std::string name, int age= 0)
-
-
-{
-    std::cout << "Hello, " << name << "! You are " << age << " years old." << std::endl;
-}
 
 int main() {
-    
-    std::string name = "Alice";
-    int age = 25;
-    double height = 5.8;  
-    bool isStudent = true;
-
-    
-    displayMessage(name, age);
-
-    new_funct(1, 2);
-
-    
-    for (int i = 1; i <= 5; i+=1) {
-        std::cout << "Counting up: " << i << std::endl;
-    }
-
-
-    
-    int countdown = 3;
-    while (countdown > 0) {
-        std::cout << "Countdown: " << countdown << std::endl;
-        countdown-= 1;
-        isStudent=  false;
-    }
-    
-    
-    if  (age < 18) 
-    
-    {
-        std::cout << "You are a minor." << std::endl;
+  int leo = 0;
+  int jay = 10;
+  for (int i = 0; i < 10; i = i + 1 ){
+    leo = leo + i;
+    if (leo == 9){
+      int shivansh = 10;
     } else {
-        std::cout << "You are an adult." << std::endl;
-        randomVar += 12;
+      jay = jay - i;
     }
-    
-    randomVar -= 6;
-
-    
-    return 0;
-}
-
-void new_funct( int            arg1    , float         arg2             ){
-    int test_var=0;
-    test_var = 1;
-    return;
+    float ansuman = 99.1;
+  }
+  int sax = -1;
+  return 0;
 }
