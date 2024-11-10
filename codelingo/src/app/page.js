@@ -1,7 +1,7 @@
 // src/app/page.js
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import PageButton from "./components/PageButton";
 import { useRouter } from "next/navigation";
@@ -16,13 +16,13 @@ import jay from "../../public/jay_pfp.png";
 
 export default function Home() {
   const router = useRouter();
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     // Check if the user is already authenticated
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // Redirect to the learning page if the user is logged in
-        router.push('/learning');
+        setIsLoggedIn(true);
       }
     });
 
@@ -40,7 +40,7 @@ export default function Home() {
       <div className="h-[100vh] mt-20">
         <SparklesPreview />
         <div className="flex justify-center">
-          <PageButton label='Get Started' route='signup' />
+          <PageButton label={isLoggedIn ? 'Continue Learning' : 'Get Started'} route={isLoggedIn ? 'learning/Hello World Program' : 'signup'} />
           <PageButton label='Learn More' handleClick={handleAboutUs} />
         </div>
       </div>

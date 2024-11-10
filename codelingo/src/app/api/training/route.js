@@ -6,11 +6,12 @@ export async function GET(req) {
   try {
     // Query to fetch topics and sections
     const sql = `
-      SELECT topic, section, content, code
-      FROM cpp_data;
+      SELECT topic, section
+      FROM cpp_training;
     `;
     
     const { rows } = await Query(sql);
+    console.log('Database query result:', rows);
 
     // Process the data to group sections under each topic
     const topics = rows.reduce((acc, row) => {
@@ -36,19 +37,17 @@ export async function GET(req) {
 // POST route to retrieve data based on a specific section
 export async function POST(req) {
   try {
-    console.log('Request:', req);
     // Parse the request body to get the section name
-    const { section } = await req.json();
-    console.log('Section:', section);
-    if (!section) {
-      return NextResponse.json({ error: 'Section parameter is required' }, { status: 400 });
+    const { section, level } = await req.json();
+    if (!section || !level) {
+      return NextResponse.json({ error: 'Section and level parameter is required' }, { status: 400 });
     }
 
     // SQL query to fetch content and code based on the section
     const sql = `
-      SELECT section, content, code
+      SELECT section, question, code, answer, points, level
       FROM cpp_data
-      WHERE section =  '${section}';
+      WHERE section = ${section} AND level = ${level};
     `;
 
     // Execute the query with the section parameter

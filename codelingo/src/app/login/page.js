@@ -8,10 +8,12 @@
 
 import Navbar from "../components/Navbar";
 import PageButton from "../components/PageButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation"; // Correct import for useRouter
 import { signIn } from '../signup/authservice'; // Ensure the path is correct
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebaseconfig"; // Import Firebase auth
 
 
 export default function Login() {
@@ -20,6 +22,21 @@ export default function Login() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const router = useRouter();
+
+    useEffect(() => {
+        // Check if the user is already authenticated
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            // Redirect to the learning page if the user is logged in
+            router.push('/learning/Hello World Program');
+          }
+        });
+    
+        // Cleanup the listener on component unmount
+        return () => unsubscribe();
+      }, [router]);
+
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -36,7 +53,7 @@ export default function Login() {
             await signIn(logInEmail, logInPassword);
             setSuccess("User logged in successfully!");
             setError(null);
-            router.push('/learning'); // Redirect to learning page after successful login
+            router.push('/learning/Hello World Program'); // Redirect to learning page after successful login
         } catch (error) {
             setError(error.message);
             setSuccess(null);
