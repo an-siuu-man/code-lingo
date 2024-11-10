@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-# --- CODELINGO C++ PARSER ---
+# --- CODELINGO C++/C PARSER ---
 # Author: Leo Cabezas Amigo
 
 """
-IDEAS: Implement pointers, references, arrays
+IDEAS: Implement pointers, references, arrays, etc.
 """
-
 """
-ISSUES: '\n'-type whitespaces are not contemplated properly in dtype, keyword, var_name statements
-        ELSE-IF BLOCKS NOT IMPLEMENTED!!!
-        Cases like 'int i = ++j' are NOT CONTEMPLATED.
-BUGS:   int i = 0, j = 5; NOT CONTEMPLATED!!!
+FUTURE TO/DO:
+    VAR_DECLARE and VAR_UPDATE of the form 'int i = ++j' are not contemplated.
+    Single-line multiple VAR_DECLARE (e.g. 'int i=0, j=1') is not contemplated.
+    FUNC_DEFINE is not useful, since function evaluations are not contemplated.
+    Need to implement remaining keyword functions as well.
 """
 
 import os
