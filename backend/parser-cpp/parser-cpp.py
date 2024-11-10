@@ -90,6 +90,9 @@ class Parser_CPP:
             raise Exception("Error. Could not open src_code file.")
 
     def _update_scope_stack(self, line):    # DONE!
+        if len(self.scope_stack) == 0:
+            return
+        
         global_scope_endline = self.scope_stack[0][1]
         curr_scope_endline = self.scope_stack[-1][1]
         
@@ -158,12 +161,15 @@ class Parser_CPP:
             if self.code[i] == "\n":
                 line += 1
             
+            #print(f"NOW IN _parse_section LOOP. self.code[i] = {self.code[i]}")
+            #print(f"line = {line} | end_line = {end_line}")
             if line >= end_line:
                 break
             
             for dtype in cpp_data_types:
                 if self.code[i:i+len(dtype)] == dtype and self.code[i+len(dtype)] in next_chars["line_wspc"]:
                     argv = [LOOP_COND, dtype, i, line, step]
+                    print(f"argv = {argv}")
                     i, line, step = self._parse_dtype(argv)
                     self._update_scope_stack(line)
                     break
@@ -534,6 +540,8 @@ class Parser_CPP:
         )
         self.json_dict["executionSteps"] = executionSteps
         
+        #print(executionSteps[-1])
+
         return i, line
     
     def _parse_if(self, argv: list):    # DONE!
@@ -679,43 +687,21 @@ class Parser_CPP:
         LOOP_COND, i, line, step, highlight = argv[:5]
         return i, line, step
 
-    def _parse_for(self, argv: list):
-        LOOP_COND, i, line, step, highlight = argv[:5]
-
-        net_bracket_cnt = 0
-        while self.code[i] != "{" and LOOP_COND(i):
-            if self.code[i] == ";": # Function declaration, not definition!
-                return i, line, step
-            if self.code[i] == "\n":
-                line += 1
-            i += 1
-        backtrack_i = i
-        startLine = line
-        net_bracket_cnt += 1
-
-        while net_bracket_cnt != 0 and LOOP_COND(i):
-            i += 1
-            if self.code[i] == "\n":
-                line += 1
-            
-            if self.code[i] == "{":
-                net_bracket_cnt += 1
-            elif self.code[i] == "}":
-                net_bracket_cnt -= 1
-        endLine = line
-
-        return i, endLine, step
-
-    def _temp_parse_for(self, argv: list):  # IN PROGRESS!
+    def _parse_for(self, argv: list):  # DONE!
         LOOP_COND, i, line, step, highlight, start_for_i, start_for_line = argv[:7]
-        
+
         scope_reference = f"__DECLAREDAT__{highlight}__FOR_LOOP__"
         if self.scope_stack[-1][0] == scope_reference:
-            loop_params = self.scope_stack[-1][3]
-            ref_eval_stmt, in_for_i, in_for_line, end_for_i, end_for_line = loop_params
+            loop_params_update = self.scope_stack[-1][3][0]
+            loop_params_continue = self.scope_stack[-1][3][1]
+            
+            ref_eval_stmt, in_for_i, in_for_line, end_for_i, end_for_line = loop_params_update
+            stmts_update_i, stmts_update_line, stmts_end_i, stmts_end_line = loop_params_continue
+            
             raw_result = eval(ref_eval_stmt)
-
+            
             if raw_result:
+                self._parse_section(stmts_update_i, stmts_update_line, step, stmts_end_i, stmts_end_line + 1)
                 i, line, step = self._parse_section(in_for_i, in_for_line, step, end_for_i, end_for_line)
                 return start_for_i - 1, start_for_line, step
             else:
@@ -725,14 +711,20 @@ class Parser_CPP:
             i += 1
         if self.code[i] == "(":
             i += len("(")
-        stmts_start = i
+        stmts_start_i = i
+        stmts_start_line = line
         while self.code[i] != ")" and LOOP_COND(i):
             if self.code[i] == "\n":
                 line += 1
+            if self.code[i] == ";":
+                stmts_update_i = i
+                stmts_update_line = line
             i += 1
-        stmts_end = i
+        stmts_end_i = i
+        stmts_end_line = line
         
-        statements = self.code[stmts_start:stmts_end]
+        statements = self.code[stmts_start_i:stmts_end_i]
+        self._parse_section(stmts_start_i, stmts_start_line, step, stmts_end_i, stmts_end_line + 1)
 
         net_bracket_cnt = 0
         while self.code[i] != "{" and LOOP_COND(i):
@@ -754,14 +746,14 @@ class Parser_CPP:
                 net_bracket_cnt -= 1
         endLine = line
 
-        eval_stmt_list = statements.split(";")
-        
-        print(f"eval_stmt_list = {eval_stmt_list}")
+        statements_list = [" ".join(x.split()) for x in statements.split(";")]
+        condition = statements_list[1]
+        eval_stmt_list = condition.split()
 
         for scope in self.scope_stack[::-1]:
             for ref in scope[2].keys():
                 eval_stmt_list = [ref if scope[2][ref][1] == x else x for x in eval_stmt_list]
-                
+                # print(f"eval_stmt_list = {eval_stmt_list}")
                 # Quick fix, find scalable solution
                 eval_stmt_list = ["False" if x == "false" else x for x in eval_stmt_list]
                 eval_stmt_list = ["True" if x == "true" else x for x in eval_stmt_list]
@@ -776,7 +768,7 @@ class Parser_CPP:
                 "step"      : step,
                 "highlight" : highlight,
                 "operation" : "FOR_LOOP",
-                "statements": statements,
+                "statements": statements_list,
                 "condition" : condition,
                 "result"    : result,
                 "startLine" : startLine,
@@ -785,20 +777,21 @@ class Parser_CPP:
         )
         self.json_dict["executionSteps"] = executionSteps
         
-        scope_reference = f"__DECLAREDAT__{highlight}__WHILE_LOOP__"
+        scope_reference = f"__DECLAREDAT__{highlight}__FOR_LOOP__"
 
         in_for_i = backtrack_i
         in_for_line = startLine
         end_for_i = i
         end_for_line = endLine
-        while_loop_params = [ref_eval_stmt, in_for_i, in_for_line, end_for_i, end_for_line]
-        
-        self.scope_stack.append([scope_reference, endLine, {}, while_loop_params])
+        loop_params_update = [ref_eval_stmt, in_for_i, in_for_line, end_for_i, end_for_line]
+        loop_params_continue = [stmts_update_i, stmts_update_line, stmts_end_i, stmts_end_line]
+
+        self.scope_stack.append([scope_reference, endLine, {}, [loop_params_update, loop_params_continue]])
 
         step += 1
 
         if raw_result:
-            return start_while_i - 1, start_while_line, step
+            return start_for_i - 1, start_for_line, step
         else:
             return i, endLine, step
 
@@ -884,9 +877,9 @@ class Parser_CPP:
         in_while_line = startLine
         end_while_i = i
         end_while_line = endLine
-        while_loop_params = [ref_eval_stmt, in_while_i, in_while_line, end_while_i, end_while_line]
+        loop_params = [ref_eval_stmt, in_while_i, in_while_line, end_while_i, end_while_line]
         
-        self.scope_stack.append([scope_reference, endLine, {}, while_loop_params])
+        self.scope_stack.append([scope_reference, endLine, {}, loop_params])
 
         step += 1
 
