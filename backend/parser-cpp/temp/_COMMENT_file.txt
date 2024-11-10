@@ -19,6 +19,8 @@ int main() {
     double height = 5.8;  
     bool isStudent = true;
 
+    double domine = height + 33;
+
     
     displayMessage(name, age);
 

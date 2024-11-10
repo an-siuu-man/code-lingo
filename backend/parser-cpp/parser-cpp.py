@@ -10,8 +10,8 @@ IDEAS: Implement pointers, references, arrays
 """
 ISSUES: '\n'-type whitespaces are not contemplated properly in dtype, keyword, var_name statements
         ELSE-IF BLOCKS NOT IMPLEMENTED!!!
+        Cases like 'int i = ++j' are NOT CONTEMPLATED.
 BUGS:   int i = 0, j = 5; NOT CONTEMPLATED!!!
-        VARIABLE INITIALIZATION WITH OTHER VARIABLES!!!
 """
 
 import os
@@ -463,13 +463,76 @@ class Parser_CPP:
             while self.code[i] != ";" and LOOP_COND(i):
                 i += 1
             value_end = i
-            value = self.code[value_start:value_end]
+            value_str = self.code[value_start:value_end]
+            
+            j = 0
+            break_signal = False
+            wsp_value_str = ""
+            while j < len(value_str):
+                for op in next_chars["evaluate"]:
+                    if value_str[j:j+len(op)] == op:
+                        substr = " " + op + " "
+                        wsp_value_str += substr
+                        
+                        j += len(op)
+                        if j >= len(value_str):
+                            break_signal = True
+                        
+                        break
+                if break_signal:
+                    break
+
+                wsp_value_str += value_str[j]
+                j += 1
+
+            value_list = wsp_value_str.split()
+            value_list_corr = []
+            for k in range(len(value_list)):
+                if value_list[k] == "++":
+                    if k == 0:
+                        value_list_corr.append(value_list[k+1])
+                        value_list_corr.extend(["+", "1"])
+                        break
+                    else:
+                        value_list_corr.extend(["+", "1"])
+                        break
+                elif value_list[k] == "--":
+                    if k == 0:
+                        value_list_corr.append(value_list[k+1])
+                        value_list_corr.extend(["-", "1"])
+                        break
+                    else:
+                        value_list_corr.extend(["-", "1"])
+                        break
+                else:
+                    value_list_corr.append(value_list[k])
+
+            value_stmt = ""
+            for l in range(len(value_list)):
+                if l == 0 or value_list[l] in ["++", "--"]:
+                    value_stmt += value_list[l]
+                elif l != 0 and value_list[l-1] in ["++", "--"]:
+                    value_stmt += value_list[l]
+                else: 
+                    value_stmt += " " + value_list[l]
+            
+            for scope in self.scope_stack[::-1]:
+                for ref in scope[2].keys():
+                    value_list_corr = [ref if scope[2][ref][1] == x else x for x in value_list_corr]
+
+                    # Quick fix, find scalable solution
+                    value_list_corr = ["False" if x == "false" else x for x in value_list_corr]
+                    value_list_corr = ["True" if x == "true" else x for x in value_list_corr]
+            ref_value_stmt = " ".join(value_list_corr)
+            
+            print(f"ref_value_stmt = {ref_value_stmt}")
+            if ref_value_stmt.strip("\"").isalnum():
+                value = ref_value_stmt
+            else:
+                value = eval(ref_value_stmt, globals())
         else:   # self.code[i] == ";"
             value = "__UNINITIALIZED__"   # Uninitialized variable case
         
-        
-
-
         reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name + "__"     
         self.scope_stack[-1][2][reference] =  [data_type, name, value]
 
@@ -481,7 +544,6 @@ class Parser_CPP:
                 value = "False"
             
             exec(f"{reference} = {value}", globals())
-            # print(eval(reference))
 
         scope = self.scope_stack[-1][0]
         executionSteps = self.json_dict["executionSteps"] 
