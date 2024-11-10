@@ -52,7 +52,7 @@ export async function POST(req) {
     `;
 
     // Execute the query with the section parameter
-    const { rows } = await Query(sql, [section]);
+    const { rows } = await Query(sql);
 
     // Check if any rows are returned
     if (rows.length === 0) {
