@@ -466,7 +466,7 @@ class Parser_CPP:
         else:   # self.code[i] == ";"
             value = "__UNINITIALIZED__"   # Uninitialized variable case
         
-        reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name
+        reference = "__DECLAREDAT__" + str(highlight) + "__NAME__" + name + "__"
 
         self.scope_stack[-1][2][reference] =  [data_type, name, value]
         if value != "__UNINITIALIZED__":
@@ -796,6 +796,8 @@ class Parser_CPP:
             
             if raw_result:
                 i, line, step = self._parse_section(in_for_i, in_for_line, step, end_for_i, end_for_line)
+                if i > end_for_i:
+                    return end_for_i, end_for_line, step
                 self._parse_section(stmts_update_i, stmts_update_line, step, stmts_end_i, stmts_end_line + 1)
                 return start_for_i - 1, start_for_line, step
             else:
@@ -826,7 +828,7 @@ class Parser_CPP:
         statements = self.code[stmts_start_i:stmts_end_i]
 
         scope_reference = f"__DECLAREDAT__{highlight}__FOR_LOOP__"
-        self.scope_stack.append([scope_reference, -1, {}, []])
+        self.scope_stack.append([scope_reference, -1, {}, [], []])
         
         self._parse_section(stmts_start_i, stmts_start_line, step, stmts_init_i, stmts_init_line + 1)
 
@@ -894,9 +896,11 @@ class Parser_CPP:
         end_for_line = endLine
         loop_params_update = [ref_eval_stmt, in_for_i, in_for_line, end_for_i, end_for_line]
         loop_params_continue = [stmts_update_i, stmts_update_line, stmts_end_i, stmts_end_line]
-        
+        control_params = [start_for_i, start_for_line, end_for_i, end_for_line]
+
         self.scope_stack[-1][1] = endLine
         self.scope_stack[-1][3].extend([loop_params_update, loop_params_continue])
+        self.scope_stack[-1][4].extend(control_params)
 
         scope = self.scope_stack[-2][0]
         executionSteps = self.json_dict["executionSteps"] 
@@ -934,6 +938,8 @@ class Parser_CPP:
 
             if raw_result:
                 i, line, step = self._parse_section(in_while_i, in_while_line, step, end_while_i, end_while_line + 1)
+                if i > end_while_i:
+                    return end_while_i, end_while_line, step
                 return start_while_i - 1, start_while_line, step
             else:
                 return end_while_i, end_while_line, step
@@ -1029,8 +1035,9 @@ class Parser_CPP:
         end_while_i = i
         end_while_line = endLine
         loop_params = [ref_eval_stmt, in_while_i, in_while_line, end_while_i, end_while_line]
-        
-        self.scope_stack.append([scope_reference, endLine, {}, loop_params])
+        control_params = [start_while_i, start_while_line, end_while_i, end_while_line]
+
+        self.scope_stack.append([scope_reference, endLine, {}, loop_params, control_params])
 
         step += 1
 
@@ -1072,8 +1079,34 @@ class Parser_CPP:
         return i, line, step
 
     def _parse_break(self, argv: list):
-        LOOP_COND, i, line, step, highlight = argv[:5]        
-        return i, line, step
+        LOOP_COND, i, line, step, highlight = argv[:5]
+
+        loop_scope = None
+        for scope in self.scope_stack[::-1]:
+            if scope[0].endswith("__FOR_LOOP__") or scope[0].endswith("__WHILE_LOOP__"):
+                loop_scope = scope
+                break
+        if loop_scope == None:
+            raise Exception("Error! BREAK statement outside of LOOP block.")
+        
+        control_params = loop_scope[4]
+        start_loop_i, start_loop_line, end_loop_i, end_loop_line = control_params
+        
+        reference = f"__DECLAREDAT__{highlight}__BREAK__"
+        scope = self.scope_stack[-1][0]
+        executionSteps = self.json_dict["executionSteps"] 
+        executionSteps.append(
+            {
+                "step"      : step,
+                "highlight" : highlight,
+                "operation" : "BREAK",
+                "reference" : reference,
+                "scope"     : scope
+            }
+        )
+        self.json_dict["executionSteps"] = executionSteps
+
+        return end_loop_i + 1, end_loop_line, step
 
     def _parse_continue(self, argv: list):
         LOOP_COND, i, line, step, highlight = argv[:5]

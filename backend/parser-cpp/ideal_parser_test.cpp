@@ -27,9 +27,12 @@ int main() {
     // For loop to count up to 5
     for (int i = 1; i <= 5; i+=1) {
         std::cout << "Counting up: " << i << std::endl;
-        if (1 == 0){
+        if (i == 3){
             int testing = 1;
+            break;
         }
+
+        randomVar += 3;
     }
 
 
