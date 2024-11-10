@@ -32,9 +32,9 @@ int main() {
 
     
     int countdown = 3;
-    while (countdown > 0) {
+    while (countdown >0) {
         std::cout << "Countdown: " << countdown << std::endl;
-        countdown-= 1;
+        --countdown;
         isStudent=  false;
     }
     

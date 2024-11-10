@@ -447,7 +447,7 @@ class Parser_CPP:
 
         return backtrack_i, startLine, step
 
-    def _parse_VAR_DECLARE(self, argv: list):   # DONE!
+    def _parse_VAR_DECLARE(self, argv: list):   # IN PROGRESS!
         LOOP_COND, i, line, step, highlight, name, data_type = argv
         
         if self.code[i] == "=":
@@ -524,15 +524,43 @@ class Parser_CPP:
             j += 1
 
         update_stmt_list = wsp_update_stmt.split()
-        update_stmt = " ".join(update_stmt_list)
+        update_stmt_list_corr = []
+        for k in range(len(update_stmt_list)):
+            if update_stmt_list[k] == "++":
+                if k == 0:
+                    update_stmt_list_corr.append(update_stmt_list[k+1])
+                    update_stmt_list_corr.extend(["+=", "1"])
+                    break
+                else:
+                    update_stmt_list_corr.extend(["+=", "1"])
+                    break
+            elif update_stmt_list[k] == "--":
+                if k == 0:
+                    update_stmt_list_corr.append(update_stmt_list[k+1])
+                    update_stmt_list_corr.extend(["-=", "1"])
+                    break
+                else:
+                    update_stmt_list_corr.extend(["-=", "1"])
+                    break
+            else:
+                update_stmt_list_corr.append(update_stmt_list[k])
+        
+        update_stmt = ""
+        for l in range(len(update_stmt_list)):
+            if l == 0 or update_stmt_list[l] in ["++", "--"]:
+                update_stmt += update_stmt_list[l]
+            elif l != 0 and update_stmt_list[l-1] in ["++", "--"]:
+                update_stmt += update_stmt_list[l]
+            else: 
+                update_stmt += " " + update_stmt_list[l]
         
         for scope in self.scope_stack[::-1]:
             for ref in scope[2].keys():
-                update_stmt_list = [ref if scope[2][ref][1] == x else x for x in update_stmt_list]
+                update_stmt_list_corr = [ref if scope[2][ref][1] == x else x for x in update_stmt_list_corr]
 
                 # Quick fix, find scalable solution
-                update_stmt_list = ["False" if x == "false" else x for x in update_stmt_list]
-                update_stmt_list = ["True" if x == "true" else x for x in update_stmt_list]
+                update_stmt_list_corr = ["False" if x == "false" else x for x in update_stmt_list_corr]
+                update_stmt_list_corr = ["True" if x == "true" else x for x in update_stmt_list_corr]
             try:
                 data_type = scope[2][reference][0]
                 name = scope[2][reference][1]
@@ -542,7 +570,7 @@ class Parser_CPP:
             except:
                 pass
         
-        ref_update_stmt = " ".join(update_stmt_list)
+        ref_update_stmt = " ".join(update_stmt_list_corr)
 
         exec(ref_update_stmt, globals())
         new_value = str(eval(reference))
@@ -649,7 +677,7 @@ class Parser_CPP:
             }
         )
         self.json_dict["executionSteps"] = executionSteps
-        self.scope_stack.append([scope_reference, endLine, {}])
+        self.scope_stack.append([scope_reference, endLine, {}, result])
 
         step += 1
 
