@@ -56,10 +56,12 @@ int main() {
     {
         randomVar -= 2;
         std::cout << "You are a minor." << std::endl;
-
-
+    
+    } else if (1 == 0) {
+        std::cout << "You are an adult." << std::endl;
+        randomVar += 12;
     } else {
-      jay = jay - i;
+        double temperature = 36.5;
     }
     
     randomVar -= 6;
@@ -73,5 +75,4 @@ void new_funct( int            arg1    , float         arg2             ){
     test_var = 1;
     return;
 }
-
 

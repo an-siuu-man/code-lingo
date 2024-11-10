@@ -56,9 +56,12 @@ int main() {
     {
         randomVar -= 2;
         std::cout << "You are a minor." << std::endl;
-    } else {
+    
+    } else if (1 == 0) {
         std::cout << "You are an adult." << std::endl;
         randomVar += 12;
+    } else {
+        double temperature = 36.5;
     }
     
     randomVar -= 6;

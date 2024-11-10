@@ -65,16 +65,17 @@ class Parser_CPP:
         self.jsonResponse = ""
 
         self.cpp_keywords_dict = {
-            "if"        : self._parse_if,
-            "else"      : self._parse_else,
+            "if"        : self._parse_if,       # IMPLEMENTED
+            "else if"   : self._parse_elseif,   # IMPLEMENTED
+            "else"      : self._parse_else,     # IMPLEMENTED
             "switch"    : self._parse_switch,
             "case"      : self._parse_case,
             "default"   : self._parse_default,
-            "for"       : self._parse_for,
-            "while"     : self._parse_while,
+            "for"       : self._parse_for,      # IMPLEMENTED
+            "while"     : self._parse_while,    # IMPLEMENTED
             "do"        : self._parse_dowhile,
-            "break"     : self._parse_break,
-            "continue"  : self._parse_continue,
+            "break"     : self._parse_break,    # IMPLEMENTED
+            "continue"  : self._parse_continue, # IMPLEMENTED
             "return"    : self._parse_return,
             "goto"      : self._parse_goto,
             "throw"     : self._parse_throw,
@@ -452,7 +453,7 @@ class Parser_CPP:
 
         return backtrack_i, startLine, step
 
-    def _parse_VAR_DECLARE(self, argv: list):   # IN PROGRESS!
+    def _parse_VAR_DECLARE(self, argv: list):   # DONE!
         LOOP_COND, i, line, step, highlight, name, data_type = argv
         
         if self.code[i] == "=":
@@ -741,7 +742,7 @@ class Parser_CPP:
                 "operation" : "IF_BLOCK",
                 "reference" : scope_reference,
                 "condition" : condition,
-                "executed"    : result,
+                "executed"  : result,
                 "startLine" : startLine,
                 "endLine"   : endLine,
                 "scope"     : scope
@@ -756,7 +757,108 @@ class Parser_CPP:
             return backtrack_i, startLine, step
         else:
             return i, endLine, step
+    
+    def _parse_elseif(self, argv: list):    # DONE!
+        LOOP_COND, i, line, step, highlight = argv[:5]
+
+        while self.code[i] in next_chars["line_wspc"] and LOOP_COND(i):
+            i += 1
+        if self.code[i] == "(":
+            i += len("(")
+        cond_start = i
+        while self.code[i] != ")" and LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            i += 1
+        cond_end = i
         
+        condition = self.code[cond_start:cond_end]
+
+        net_bracket_cnt = 0
+        while self.code[i] != "{" and LOOP_COND(i):
+            if self.code[i] == "\n":
+                line += 1
+            i += 1
+        backtrack_i = i
+        startLine = line
+        net_bracket_cnt += 1
+
+        while net_bracket_cnt != 0 and LOOP_COND(i):
+            i += 1
+            if self.code[i] == "\n":
+                line += 1
+            
+            if self.code[i] == "{":
+                net_bracket_cnt += 1
+            elif self.code[i] == "}":
+                net_bracket_cnt -= 1
+        endLine = line
+
+        j = 0
+        break_signal = False
+        wsp_condition = ""
+        while j < len(condition):
+            for op in next_chars["evaluate"]:
+                if condition[j:j+len(op)] == op:
+                    substr = " " + op + " "
+                    wsp_condition += substr
+                    
+                    j += len(op)
+                    if j >= len(condition):
+                        break_signal = True
+                    
+                    break
+            if break_signal:
+                break
+
+            wsp_condition += condition[j]
+            j += 1
+
+        eval_stmt_list = wsp_condition.split()
+        condition = " ".join(eval_stmt_list)
+
+        for scope in self.scope_stack[::-1]:
+            for ref in scope[2].keys():
+                eval_stmt_list = [ref if scope[2][ref][1] == x else x for x in eval_stmt_list]
+        ref_eval_stmt = " ".join(eval_stmt_list)
+
+        raw_result = eval(ref_eval_stmt)
+        result = str(raw_result)
+
+        scope_reference = f"__DECLAREDAT__{highlight}__ELSEIF_BLOCK__"
+        scope = self.scope_stack[-1][0]
+
+        prev_scope = self.scope_stack[-1]
+        if not (prev_scope[0].endswith("__IF_BLOCK__") or prev_scope[0].endswith("__ELSEIF_BLOCK__")):
+            raise Exception("Error! ELSEIF BLOCK WITHOUT PRECEDING IF/ELSEIF BLOCK")
+        any_executed = prev_scope[3]
+        execute =  not any_executed and raw_result
+        any_executed = any_executed or execute
+
+        executionSteps = self.json_dict["executionSteps"] 
+        executionSteps.append(
+            {
+                "step"      : step,
+                "highlight" : highlight,
+                "operation" : "ELSEIF_BLOCK",
+                "reference" : scope_reference,
+                "condition" : condition,
+                "executed"  : str(execute),
+                "startLine" : startLine,
+                "endLine"   : endLine,
+                "scope"     : scope
+            }
+        )
+        self.json_dict["executionSteps"] = executionSteps
+        self.scope_stack.append([scope_reference, endLine, {}, any_executed])
+
+        step += 1
+        
+        if execute:
+            return backtrack_i, startLine, step
+        else:
+            return i, endLine, step
+
     def _parse_else(self, argv: list):  # DONE!
         LOOP_COND, i, line, step, highlight = argv[:5]
 
@@ -784,9 +886,11 @@ class Parser_CPP:
         scope = self.scope_stack[-1][0]
         
         prev_scope = self.scope_stack[-1]
-        if not prev_scope[0].endswith("__IF_BLOCK__"):
-            raise Exception("Error! ELSE BLOCK WITHOUT PRECEDING")
-        executed = not prev_scope[3]
+        print(f"prev_scope[0] = {prev_scope[0]}")
+        if not (prev_scope[0].endswith("__IF_BLOCK__") or prev_scope[0].endswith("__ELSEIF_BLOCK__")):
+            raise Exception("Error! ELSE BLOCK WITHOUT PRECEDING IF/ELSEIF BLOCK")
+        any_executed = prev_scope[3]
+        executed = not any_executed
 
         executionSteps = self.json_dict["executionSteps"] 
         executionSteps.append(

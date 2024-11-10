@@ -1,6 +1,18 @@
 #include <iostream>
-int main() {
+#include <string>
 
+void new_funct(int, float);
+
+int randomVar = 1633;
+
+void displayMessage(std::string name, int age= 0)
+
+
+{
+    std::cout << "Hello, " << name << "! You are " << age << " years old." << std::endl;
+}
+
+int main() {
     
     std::string name = "Alice";
     int age = 25;
@@ -44,13 +56,13 @@ int main() {
     {
         randomVar -= 2;
         std::cout << "You are a minor." << std::endl;
-
-
-
+    
+    } else if (1 == 0) {
+        std::cout << "You are an adult." << std::endl;
+        randomVar += 12;
     } else {
-      jay = jay - i;
+        double temperature = 36.5;
     }
-
     
     randomVar -= 6;
 
@@ -63,3 +75,4 @@ void new_funct( int            arg1    , float         arg2             ){
     test_var = 1;
     return;
 }
+
