@@ -1,8 +1,4 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
-import { ReactFlow, Background, Controls } from "reactflow";
-import "reactflow/dist/style.css";
+import React, { useEffect, useState } from 'react';
 
 const data =  {
     "code": "#include <iostream>\nint main() {\n  int leo = 0;\n  int jay = 10;\n  for (int i = 0; i < 10; i = i + 1 ){\n    leo = leo + i;\n    if (leo == 9){\n      int shivansh = 10;\n    } else {\n      jay = jay - i;\n    }\n    float ansuman = 99.1;\n  }\n  int sax = -1;\n  return 0;\n}",
@@ -815,142 +811,152 @@ const data =  {
     ]
 };
 
-const nodeStyle = {
-  padding: "8px",
-  backgroundColor: "black",
-  color: "white",
-  border: "1px solid white",
-  fontFamily: "monospace",
-  fontSize: "12px",
-};
-
-const generateNodes = () => {
-  const nodes = [];
-  const scopePositions = { "__SCOPE__GLOBAL__": { x: 10, y: 10 } }; // Track positions for each scope
-
-  // Create the global scope node first
-  nodes.push({
-    id: "__SCOPE__GLOBAL__",
-    type: "group",
-    data: { label: "Global Scope" },
-    position: { x: 10, y: 10 },
-    style: { ...nodeStyle, width: 400, height: 600 },
-  });
-
-  data.executionSteps.forEach((step, index) => {
-    const id = step.reference || `node-${index}`;
-    const scope = step.scope || "__SCOPE__GLOBAL__";
-
-    // Initialize position if scope not defined
-if (!scopePositions[scope]) {
-  const parentScope = scopePositions[step.scope] || scopePositions["__SCOPE__GLOBAL__"];
-  scopePositions[scope] = { x: 20, y: parentScope.y + 50 };
-}
-
-    const position = scopePositions[scope];
-    const baseNode = {
-      id,
-      data: { label: "" },
-      position: { x: position.x, y: position.y },
-      parentNode: scope,
-      extent: "parent",
-      style: { ...nodeStyle, width: 200 },
-    };
-
-    switch (step.operation) {
-      case "FUNCT_DEFINE":
-        baseNode.data.label = `${step.name}(${step.args.join(", ")})`;
-        baseNode.type = "group";
-        baseNode.style.width = 300;
-        baseNode.style.height = 400;
-        scopePositions[step.reference] = { x: position.x + 20, y: position.y + 50 }; // Set inner position for the function scope
-        break;
-
-      case "VAR_DECLARE":
-        baseNode.data.label = `${step.name} = ${step.value}`;
-        break;
-
-      case "VAR_UPDATE":
-        baseNode.data.label = `${step.name} = ${step.new_value}`;
-        break;
-
-      case "FOR_LOOP":
-        baseNode.data.label = `${step.name} (${step.condition}: ${step.result})`;
-        baseNode.type = "group";
-        baseNode.style.width = 250;
-        baseNode.style.height = 300;
-        scopePositions[step.reference] = { x: position.x + 20, y: position.y + 50 }; // Set inner position for the loop scope
-        break;
-
-      case "IF_BLOCK":
-        baseNode.data.label = `${step.name} (${step.condition}: ${step.result})`;
-        baseNode.type = "group";
-        baseNode.style.width = 220;
-        baseNode.style.height = 150;
-        scopePositions[step.reference] = { x: position.x + 20, y: position.y + 50 }; // Set inner position for the if-block scope
-        break;
-
-      case "ELSE_BLOCK":
-        baseNode.data.label = "else";
-        baseNode.type = "group";
-        baseNode.style.width = 220;
-        baseNode.style.height = 150;
-        scopePositions[step.reference] = { x: position.x + 20, y: position.y + 50 }; // Set inner position for the else-block scope
-        break;
-
-      default:
-        baseNode.data.label = step.lib_name || "";
-        break;
-    }
-
-    // Increment position for the next node within the same scope
-    scopePositions[scope].y += 80;
-
-    nodes.push(baseNode);
-  });
-
-  return nodes;
-};
-
-const CustomFlow = () => {
-  const initialNodes = generateNodes();
-  const [nodes, setNodes] = useState(initialNodes);
-  const [stepIndex, setStepIndex] = useState(0);
-
-  const updateNodes = useCallback(() => {
-    const currentStep = data.executionSteps[stepIndex];
-
-    if (currentStep?.operation === "VAR_UPDATE") {
-      setNodes((nds) =>
-        nds.map((node) =>
-          node.id === currentStep.reference
-            ? { ...node, data: { ...node.data, label: `${currentStep.name} = ${currentStep.new_value}` } }
-            : node
-        )
-      );
-    }
-
-    setStepIndex((prevIndex) => prevIndex + 1);
-  }, [stepIndex]);
+const VisualizationPage = () => {
+  const [variables, setVariables] = useState({}); // Store variable state
+  const [currentStep, setCurrentStep] = useState(0);
+  const [highlightedReference, setHighlightedReference] = useState(null); // Track highlighted reference
 
   useEffect(() => {
+    // Function to process each step
+    const processStep = (step) => {
+      const { operation, reference, name, value, new_value, condition, result, scope } = step;
+      setVariables((prevVars) => {
+        const updatedVars = { ...prevVars };
+
+        if (operation === 'VAR_DECLARE' || operation === 'FUNCT_DEFINE') {
+          updatedVars[reference] = {
+            label: `${name} = ${value ?? ''}`,
+            scope
+          };
+        } else if (operation === 'VAR_UPDATE' && updatedVars[reference]) {
+          updatedVars[reference].label = `${name} = ${new_value}`;
+        } else if (operation === 'IF_BLOCK') {
+          updatedVars[reference] = {
+            label: `IF (${condition}: ${result})`,
+            scope
+          };
+        } else if (operation === 'ELSE_BLOCK') {
+          updatedVars[reference] = {
+            label: `ELSE`,
+            scope
+          };
+        } else if (operation === 'FOR_LOOP') {
+          updatedVars[reference] = {
+            label: `FOR (${condition})`,
+            scope
+          };
+        } else if (operation === 'WHILE_LOOP') {
+          updatedVars[reference] = {
+            label: `WHILE (${condition})`,
+            scope
+          };
+        }
+
+        return updatedVars;
+      });
+
+      // Highlight the updated or newly added variable
+      setHighlightedReference(reference);
+      setTimeout(() => setHighlightedReference(null), 1000); // Remove highlight after 1 second
+    };
+
+    // Step through execution data
     const interval = setInterval(() => {
-      if (stepIndex < data.executionSteps.length) {
-        updateNodes();
+      if (currentStep < data.executionSteps.length) {
+        processStep(data.executionSteps[currentStep]);
+        setCurrentStep((prevIndex) => prevIndex + 1);
+      } else {
+        clearInterval(interval);
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [stepIndex, updateNodes]);
+  }, [currentStep]);
+
+  // Function to render variables in nested scopes
+  const renderVariables = (scope = "__SCOPE__GLOBAL__") => {
+    return Object.entries(variables)
+      .filter(([, varData]) => varData.scope === scope)
+      .map(([key, varData]) => (
+        <div
+          key={key}
+          className={`variable-box ${highlightedReference === key ? 'highlight' : ''}`} // Add highlight class if needed
+        >
+          <div>{varData.label}</div>
+          {renderVariables(key)} {/* Recursively render nested scopes */}
+        </div>
+      ));
+  };
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <ReactFlow nodes={nodes} fitView>
-        <Background />
-        <Controls />
-      </ReactFlow>
+    <div style={{ padding: '20px' }}>
+      <h2>Execution Visualization</h2>
+      <div className="visualization-container">
+        {renderVariables()}
+      </div>
     </div>
   );
 };
 
-export default CustomFlow;
+// CSS in JS styling for better control
+const styles = {
+  visualizationContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'start',
+    gap: '10px',
+    backgroundColor: '#f0f0f0',
+    padding: '20px',
+    borderRadius: '8px',
+  },
+  variableBox: {
+    backgroundColor: '#333',
+    color: '#fff',
+    padding: '10px',
+    border: '1px solid white',
+    borderRadius: '4px',
+    fontFamily: 'monospace',
+    fontSize: '14px',
+    marginLeft: '20px',
+    transition: 'background-color 0.5s ease', // Transition effect for background color
+  },
+  highlight: {
+    backgroundColor: '#4CAF50', // Highlight color for updated variable
+  },
+};
+
+// Injecting styles to match inline CSS
+const VisualizationPageStyled = () => (
+  <>
+    <style>
+      {`
+        .visualization-container {
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          gap: 10px;
+          background-color: #f0f0f0;
+          padding: 20px;
+          border-radius: 8px;
+        }
+        .variable-box {
+          background-color: #333;
+          color: #fff;
+          padding: 10px;
+          border: 1px solid white;
+          border-radius: 4px;
+          font-family: monospace;
+          font-size: 14px;
+          margin-left: 20px;
+          transition: background-color 0.5s ease;
+        }
+        .variable-box.highlight {
+          background-color: #4CAF50; /* Highlight color */
+        }
+      `}
+    </style>
+    <VisualizationPage />
+  </>
+);
+
+export default VisualizationPageStyled;

@@ -1,11 +1,11 @@
 // pages/index.js
 "use client";
-import NestedFlow from '../components/Visu';
+import VisualizationPageStyled from '../components/Visu';
 
 export default function Home() {
   return (
     <div>
-      <NestedFlow />
+      <VisualizationPageStyled />
     </div>
   );
 }
