@@ -1,9 +1,16 @@
 #include <iostream>
 int main() {
-  int variable1 = 10;
-  int variable2 = 20;
-
-  variable2 = variable2 - variable1;
-  
+  int leo = 0;
+  int jay = 10;
+  for (int i = 0; i < 10; i = i + 1 ){
+    leo = leo + i;
+    if (leo == 9){
+      int shivansh = 10;
+    } else {
+      jay = jay - i;
+    }
+    float ansuman = 99.1;
+  }
+  int sax = -1;
   return 0;
 }
