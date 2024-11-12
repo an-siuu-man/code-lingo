@@ -1,5 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+#temp
+../backend/parser-cpp/temp/_COMMENT_file.txt
+../backend/parser-cpp/temp_code.cpp
+../backend/parser-cpp/temp/_INCLUDE_file.txt
+
+
 # dependencies
 /node_modules
 /.pnp
