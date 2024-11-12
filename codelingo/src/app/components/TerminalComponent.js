@@ -146,5 +146,5 @@ export default function TerminalComp() {
         };
     }, []); // Empty dependency array ensures useEffect runs only once
 
-    return <div ref={terminalRef} style={{ width: "500px", height: "500px" }} />;
+    return <div ref={terminalRef} style={{ width: "500px", height: "450px" }} />;
 }

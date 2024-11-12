@@ -96,29 +96,29 @@ export default function Training() {
 
                 {/* Flex container for Editor and Terminal side by side */}
                 <div
-                    className="mt-[2vh] flex h-[500px] w-[90%] space-x-4"
+                    className="mt-[2vh] flex justify-center h-[500px] w-[90%] "
                     style={{ fontFamily: 'source code pro' }}
->
+>                   <div className='w-[fit-content] h-[fit-content] flex justify-between space-x-4 bg-[#2e2e2e]  p-4 rounded-lg '>
                     {/* EditorMonaco on the left */}
                     <div
-                        className="flex-grow p-4 h-[fit-content] bg-[#2e2e2e] rounded-lg shadow-lg"
+                        className="p-4 h-[fit-content] bg-[#404040] rounded-lg shadow-lg"
                         style={{
                             width: 'fit-content',
                             borderRadius: '8px', // Rounded corners
                         }}>
-                        <EditorMonaco readOnly={true} height="500px" width='650px' incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} isDynamic={true} />
+                        <EditorMonaco readOnly={true} height="450px" width='750px' incomingCode={incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} isDynamic={true} />
                     </div>
 
                     {/* TerminalComp on the right */}
                     <div
-                        className="flex-grow p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
+                        className="p-4 bg-[#404040] rounded-lg shadow-lg w-[fit-content]"
                         style={{
                             height: 'fit-content',
-                            width: 'fit-content',
                             borderRadius: '8px', // Rounded corners
                             overflow: '', // Prevents overflow for rounded edges
                         }}>
                         <TerminalComp />
+                    </div>
                     </div>
                 </div>
 
