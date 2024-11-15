@@ -121,6 +121,8 @@ const VisualizationPageStyled = ({ data }) => {
         {`
           .visualization-container {
             display: flex;
+            overflow-y: scroll;
+            max-height: 450px;
             flex-direction: column;
             align-items: start;
             gap: 10px;

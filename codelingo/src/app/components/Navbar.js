@@ -53,7 +53,7 @@ export default function Navbar(props) {
 
     const handleLogout = async () => {
         await logOut();
-        router.push('/');
+        setTimeout(() => {router.push('/');}, 1000);
     };
 
     return (
