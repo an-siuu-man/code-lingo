@@ -42,10 +42,9 @@ const Sidebar = () => {
   }, [sidebarRef]);
 
 
-  console.log(topics);
   return (
     <nav
-    ref={sidebarRef}
+      ref={sidebarRef}
       className={`z-[99] learning-sidebar fixed top-0 left-0 h-full overflow-scroll transition-all duration-300 ${
         isOpen ? 'w-[30vw]' : 'w-[5vw]'
       }`}

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -9,6 +9,7 @@ const Sidebar = () => {
   const [topics, setTopics] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -26,9 +27,24 @@ const Sidebar = () => {
     fetchTopics();
 
   }, []);
-  console.log(topics);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarRef]);
+
+
   return (
     <nav
+      ref={sidebarRef}
       className={`z-[99] learning-sidebar fixed top-0 left-0 h-full overflow-scroll bg-[#333] transition-all duration-300 ${
         isOpen ? 'w-[32vw]' : 'w-[5vw]'
       }`}
