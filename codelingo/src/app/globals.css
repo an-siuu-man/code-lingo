@@ -77,7 +77,16 @@ label {
   background: rgba(29, 31, 33, 0.8);
   backdrop-filter: blur(10px);
 }
+.learning-sidebar,
+.training-sidebar {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
 
+.learning-sidebar::-webkit-scrollbar,
+.training-sidebar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
 .sub-topic {
   font-family: 'Source Code Pro', monospace;
 
