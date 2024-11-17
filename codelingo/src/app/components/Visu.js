@@ -64,7 +64,7 @@ const VisualizationPage = ({ saxx }) => {
       });
 
       setHighlightedReference(reference);
-      setTimeout(() => setHighlightedReference(null), 1000);
+      setTimeout(() => setHighlightedReference(null), 1500);
     };
 
     const interval = setInterval(() => {
@@ -121,12 +121,12 @@ const VisualizationPageStyled = ({ data }) => {
         {`
           .visualization-container {
             display: flex;
+            background-color: #f5f5f5;
             overflow-y: scroll;
             max-height: 450px;
             flex-direction: column;
             align-items: start;
             gap: 10px;
-            background-color: #f0f0f0;
             padding: 20px;
             border-radius: 8px;
           }
@@ -134,12 +134,13 @@ const VisualizationPageStyled = ({ data }) => {
             background-color: #333;
             color: #fff;
             padding: 10px;
-            border: 1px solid white;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 14px;
-            margin-left: 20px;
-            transition: background-color 0.5s ease;
+            margin: 10px;
+            border: 1px solid #f5f5f5;
+            border-radius: 8px;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s ease;
           }
           .variable-box.highlight {
             background-color: #4CAF50;
