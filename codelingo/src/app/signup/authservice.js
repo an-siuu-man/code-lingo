@@ -4,10 +4,6 @@ import { auth, db } from "../firebaseconfig";
 import { doc, setDoc } from "firebase/firestore";
 
 
-// const signUp = (email, password) => {
-//   return createUserWithEmailAndPassword(auth, email, password);
-// };
-
 const signUp = async (email, password, username) => {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;

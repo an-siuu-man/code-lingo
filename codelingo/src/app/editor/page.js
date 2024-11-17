@@ -1,7 +1,6 @@
 // components/MonEditor.js
 'use client';
 import EditorMonaco from '@/app/components/EditorMonaco';
-import JSONDisplay from '@/app/components/JSONDisplay'; // Component to display JSON
 import React, { useState } from 'react';
 import VisualizationPageStyled from '../components/Visu';
 

@@ -21,7 +21,6 @@ export default function Home() {
     // Check if the user is already authenticated
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Redirect to the learning page if the user is logged in
         setIsLoggedIn(true);
       }
     });

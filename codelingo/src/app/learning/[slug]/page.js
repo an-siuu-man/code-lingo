@@ -36,26 +36,6 @@ export default function Learning() {
 
     }, [params.slug]);
 
-    console.log('Incoming JSON:', incomingJSON);
-//     return (
-//         <div className='relative flex w-full'>
-//             {/* Sidebar component on the left */}
-//             <Sidebar />
-
-//             {/* Main content area for the Learning page */}
-//             <div className='absolute left-[5vw] w-[95vw] items-right flex-grow' style={{ backgroundColor: '#1e1e1e', color: 'white', minHeight: '100vh' }}>
-//             <Navbar />
-//             <h1>Learning Page</h1>
-//                 <div className='mr-[2vw] flex-grow p-4 bg-[#2e2e2e] rounded-lg shadow-lg'>
-//                     <EditorMonaco  readOnly={false} height='450px' width='50%' incomingCode = {incomingJSON.code ? incomingJSON.code.replace(/\\n/g, '\n') : ''} />
-//                     <VisualizationPageStyled />
-//                 </div>
-
-//             </div>
-//         </div>
-//     );
-// }
-
 return (
   <div className="relative flex w-full">
       {/* Sidebar component on the left */}
