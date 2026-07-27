@@ -7,7 +7,7 @@ export default function PageButton(props) {
 
     return (
         <button
-         className="flex justify-center min-w-[200px] max-w-[350px] h-auto mx-[15px] px-[20px] py-[10px] border-solid border-[2px] border-[#FF6B6B] rounded-[10px] bg-[transparent] text-white text-2xl duration-[200ms] hover:bg-[#FF6B6B] hover:text-[#1d1f21]"
+         className="flex justify-center min-w-[200px] max-w-[350px] h-auto mx-[15px] px-[20px] py-[10px] border-solid border-[2px] border-[#FF6B6B] rounded-[10px] bg-[transparent] text-white text-2xl font-[poppins] transition-all duration-[200ms] hover:bg-[#FF6B6B] hover:text-[#1d1f21] hover:shadow-[0_0_20px_rgba(255,107,107,0.45)] hover:-translate-y-[2px] active:translate-y-0"
          onClick = { props.route ? () => {router.push(props.route)} : props.handleClick}
         >{props.label}</button>
     );

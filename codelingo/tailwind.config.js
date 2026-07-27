@@ -10,6 +10,18 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        coral: {
+          DEFAULT: "#FF6B6B",
+          dark: "#e05555",
+        },
+        amber: {
+          DEFAULT: "#FCA204",
+        },
+        panel: {
+          DEFAULT: "#1e1e1e",
+          card: "#2e2e2e",
+          nested: "#404040",
+        },
       },
 
       fontFamily: {

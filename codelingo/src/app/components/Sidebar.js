@@ -50,41 +50,55 @@ const Sidebar = () => {
       }`}
     >
       <div
-        className={`flex items-right align-right w-[100%] cursor-pointer`}
+        className={`flex items-right align-right w-[100%] cursor-pointer group`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className='px-4 pt-6'>
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="35" height="35" viewBox="0 0 256 256">
-                <g fillOpacity="0" fill="#dddddd" height={'20px'} width={'20px'} fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0"><path d="M0,256v-256h256v256z" id="bgRectangle"></path></g><g fill="#ffffff" fillRule="nonzero" stroke="none" strokeWidth="1" strokeLinecap="butt" strokeLinejoin="miter" strokeMiterlimit="10" strokeDasharray="" strokeDashoffset="0" fontFamily="none" fontWeight="none" fontSize="none" textAnchor="none" style={{mixBlendMode: "normal"}}><g transform="scale(3.55556,3.55556)"><path d="M56,48c2.209,0 4,1.791 4,4c0,2.209 -1.791,4 -4,4c-1.202,0 -38.798,0 -40,0c-2.209,0 -4,-1.791 -4,-4c0,-2.209 1.791,-4 4,-4c1.202,0 38.798,0 40,0zM56,32c2.209,0 4,1.791 4,4c0,2.209 -1.791,4 -4,4c-1.202,0 -38.798,0 -40,0c-2.209,0 -4,-1.791 -4,-4c0,-2.209 1.791,-4 4,-4c1.202,0 38.798,0 40,0zM56,16c2.209,0 4,1.791 4,4c0,2.209 -1.791,4 -4,4c-1.202,0 -38.798,0 -40,0c-2.209,0 -4,-1.791 -4,-4c0,-2.209 1.791,-4 4,-4c1.202,0 38.798,0 40,0z"></path></g></g>
+        <div className='px-4 pt-6 transition-transform duration-300 group-hover:scale-110'>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {isOpen ? (
+                <>
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1="6" y1="18" x2="18" y2="6" />
+                </>
+              ) : (
+                <>
+                  <line x1="4" y1="7" x2="20" y2="7" />
+                  <line x1="4" y1="12" x2="20" y2="12" />
+                  <line x1="4" y1="17" x2="20" y2="17" />
+                </>
+              )}
             </svg>
         </div>
       </div>
       {isOpen && (
         <ul>
-          <h1 className="py-4 ml-8 text-3xl font-[700] text-left">Learning Topics</h1>
+          <h1 className="py-4 ml-8 text-3xl font-[700] text-left fade-in-up">Learning Topics</h1>
 
           {topics.map((topicObj, index) => (
-            <li key={index}>
-              <p className="pt-2 ml-8 font-[600] text-[#ff6b6b] font-[poppins]">{topicObj.topic}</p>
+            <li key={index} className="sidebar-item-in" style={{ animationDelay: `${index * 60}ms` }}>
+              <p className="pt-3 ml-8 font-[600] text-[#ff6b6b] font-[poppins] tracking-wide">{topicObj.topic}</p>
               <ul className="topic-name">
                 <table className="w-[max-content]">
                   <tbody>
-                    {topicObj.subheadings.map((subheading, idx) => (
-                      <tr key={idx} className="cursor-pointer transition hover:text-[#ff6b6b]">
-                        <td >
-                            <p className={`${pathname.includes(`${subheading.section.replace(/\s/g, '%20')}`) ? 'text-[#FCA204]' : ''} text-left min-w-[30px] sub-topic ml-8 mr-2 text-[15px]`}>
-                            {`${idx + 1}.`}
-                          </p>
-                        </td>
-                        <td>
-                           <Link 
-                          className={` ${pathname.includes(`${subheading.section.replace(/\s/g, '%20')}`) ? 'text-[#FCA204]' : ''} text-left sub-topic ml-2 text-[15px]`} 
-                          href={`/learning/${subheading.section.replace(/\s/g, '%20')}`}>
-                            {subheading.section}
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
+                    {topicObj.subheadings.map((subheading, idx) => {
+                      const isActive = pathname === `/learning/${subheading.section.replace(/\s/g, '%20')}`;
+                      return (
+                        <tr key={idx} className={`sidebar-row ${isActive ? 'active' : ''} cursor-pointer`}>
+                          <td>
+                            <p className={`${isActive ? 'text-[#FCA204]' : ''} text-left min-w-[30px] sub-topic ml-6 mr-2 text-[15px] py-1`}>
+                              {`${idx + 1}.`}
+                            </p>
+                          </td>
+                          <td>
+                            <Link
+                              className={`${isActive ? 'text-[#FCA204]' : 'hover:text-[#ff6b6b]'} block text-left sub-topic ml-2 text-[15px] py-1 transition-colors duration-150`}
+                              href={`/learning/${subheading.section.replace(/\s/g, '%20')}`}>
+                              {subheading.section}
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </ul>

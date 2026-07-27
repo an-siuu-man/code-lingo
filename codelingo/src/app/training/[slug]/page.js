@@ -72,16 +72,16 @@ export default function Training() {
             {/* Main content area for the Training page */}
             <div className='absolute left-[5vw] w-[95vw] items-right flex-grow' style={{ backgroundColor: '#1e1e1e', color: 'white', minHeight: '100vh' }}>
                 <Navbar />
-                <div className='flex justify-between w-[90%] '>
+                <div className='flex justify-between w-[90%] px-[2vw] pt-4 fade-in-up'>
                     <div className='flex flex-row items-center'>
                     <h1 className='training-header text-5xl font-[poppins] mr-4'>Training</h1><h1 className='training-header text-5xl font-[poppins] text-[#ff6b6b]'>Page</h1>
                     </div>
                     <div className=''>
                         <h1 className='text-center text-2xl font-[poppins] font-[700] '>Challenge Level</h1>
                         <ul className='flex flex-row justify-between '>
-                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 1), setSelectedLevel(1)}} className={`${selectedLevel  === 1 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 1</li>
-                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 2), setSelectedLevel(2)}} className={`${selectedLevel  === 2 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 2</li>
-                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 3), setSelectedLevel(3)}} className={`${selectedLevel  === 3 ? 'bg-[#ff6b6b]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition hover:bg-[#ff6b6b] `}>Level 3</li>
+                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 1), setSelectedLevel(1)}} className={`${selectedLevel  === 1 ? 'bg-[#ff6b6b] shadow-[0_0_14px_rgba(255,107,107,0.5)]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition-all duration-200 hover:bg-[#ff6b6b] hover:-translate-y-[1px]`}>Level 1</li>
+                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 2), setSelectedLevel(2)}} className={`${selectedLevel  === 2 ? 'bg-[#ff6b6b] shadow-[0_0_14px_rgba(255,107,107,0.5)]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition-all duration-200 hover:bg-[#ff6b6b] hover:-translate-y-[1px]`}>Level 2</li>
+                            <li onClick = {() => {handleLevelChange(params.slug.replace(/%20/g, ' '), 3), setSelectedLevel(3)}} className={`${selectedLevel  === 3 ? 'bg-[#ff6b6b] shadow-[0_0_14px_rgba(255,107,107,0.5)]' : "" } p-2 m-2 border-[2px] rounded border-[#ff6b6b] cursor-pointer font-[600] font-[poppins] transition-all duration-200 hover:bg-[#ff6b6b] hover:-translate-y-[1px]`}>Level 3</li>
                         </ul>
                     </div>
                 </div>
@@ -98,10 +98,10 @@ export default function Training() {
                 <div
                     className="mt-[2vh] flex justify-center h-[500px] w-[90%] "
                     style={{ fontFamily: 'source code pro' }}
->                   <div className='w-[fit-content] h-[fit-content] flex justify-between space-x-4 bg-[#2e2e2e]  p-4 rounded-lg '>
+>                   <div className='w-[fit-content] h-[fit-content] flex justify-between space-x-4 bg-[#2e2e2e] border border-white/5 p-4 rounded-xl shadow-lg'>
                     {/* EditorMonaco on the left */}
                     <div
-                        className="p-4 h-[fit-content] bg-[#404040] rounded-lg shadow-lg"
+                        className="p-4 h-[fit-content] bg-[#404040] border border-white/5 rounded-lg shadow-inner"
                         style={{
                             width: 'fit-content',
                             borderRadius: '8px', // Rounded corners
@@ -111,7 +111,7 @@ export default function Training() {
 
                     {/* TerminalComp on the right */}
                     <div
-                        className="p-4 bg-[#404040] rounded-lg shadow-lg w-[fit-content]"
+                        className="p-4 bg-[#404040] border border-white/5 rounded-lg shadow-inner w-[fit-content]"
                         style={{
                             height: 'fit-content',
                             borderRadius: '8px', // Rounded corners

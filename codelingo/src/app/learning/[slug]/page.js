@@ -51,16 +51,16 @@ return (
           }}
       >
           <Navbar />
-          <div className='flex flex-row items-center my-4'>
+          <div className='flex flex-row items-center my-4 px-[2vw] pt-4 fade-in-up'>
                     <h1 className='training-header text-5xl font-[poppins] mr-4 mb-8'>Learning</h1><h1 className='training-header text-5xl font-[poppins] text-[#ff6b6b] mb-8'>Page</h1>
                     </div>
           {/* Container for Editor and Visualization side-by-side */}
           <div
-              className="flex space-x-4 my-4 mr-[5vw] p-4 bg-[#2e2e2e] rounded-lg shadow-lg"
+              className="flex space-x-4 my-4 mx-[2vw] mr-[5vw] p-4 bg-[#2e2e2e] rounded-xl shadow-lg border border-white/5"
           >
               {/* EditorMonaco on the left */}
               <div
-                  className="flex-grow p-4 rounded-lg"
+                  className="flex-grow p-4 rounded-lg border border-white/5 shadow-inner"
                   style={{
                       backgroundColor: '#404040',
                       width: '60%',
@@ -79,7 +79,7 @@ return (
 
               {/* VisualizationPageStyled on the right */}
               <div
-                  className="flex-grow p-4 rounded-lg "
+                  className="flex-grow rounded-lg border border-white/5 shadow-inner styled-scrollbar"
                   style={{
                       backgroundColor: '#404040',
                       width: '50%',
